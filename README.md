@@ -6,5 +6,5 @@ include news about transfers, match results along with statistics(such as posses
 on target, corners, passing, fouls and cards). It’ll also have league standings.
 
 ### Project Reports
-* [Project Proposal Documentat](reports/proposal.pdf)
+* [Proposal](reports/proposal.pdf)
 
