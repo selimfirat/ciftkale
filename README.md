@@ -7,4 +7,5 @@ on target, corners, passing, fouls and cards). It’ll also have league standing
 
 ### Project Reports
 * [Proposal](reports/proposal.pdf)
+* [Design](reports/design.pdf)
 
