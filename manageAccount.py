@@ -9,9 +9,6 @@ import random
 
 from django.db.utils import DatabaseError
 
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ciftkale.settings")
-
 #Source:https://gist.github.com/23maverick23/4131896
 def password_generator(size=10, chars=string.ascii_letters + string.digits):
     """
@@ -27,18 +24,16 @@ def password_generator(size=10, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for i in range(size))
 
 def forgotPassword(phone):
-    pword = password_generator();
     with connection.cursor() as cursor:
         cursor.execute("SELECT phone_number FROM person WHERE phone_number = %s", [phone])
         row = cursor.fetchone()
-        if (row is not None ):
+    if (row is not None ):
         with connection.cursor() as cursor:
-            try:
-                cursor.execute("UPDATE SET hashed_password = %s  FROM person WHERE  phone_number = %s", [pword, phone])            
-			except DatabaseError:
-                return {'result': 'failed'}
-			return {'result': 'success'}
-
+            cursor.execute("UPDATE SET hashed_password = %s  FROM person WHERE  phone_number = %s",[password_generator(), phone])
+            row2 = cursor.fetchone()
+            return {'result': 'success'}
+    else:
+        return {'result': 'failed'}
 
 def changePassword(username, currentPass, newPass):
     with connection.cursor() as cursor:
@@ -69,5 +64,5 @@ def changePassword(username, currentPass, newPass):
         else:
             return {'result': 'failed'};
 
-forgotPassword('123456')
+
     
