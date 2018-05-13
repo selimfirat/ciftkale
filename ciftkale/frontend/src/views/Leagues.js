@@ -109,7 +109,6 @@ class ListRealLeagues extends Component {
 
 
     fetchNewData(state, instance) {
-        console.log('yeter ulan');
         this.setState({ loading: true });
 
         requestData(
@@ -118,9 +117,21 @@ class ListRealLeagues extends Component {
             state.sorted,
             state.filtered
         ).then(res => {
+            console.log(res);
+            let data = [];
+            for (let rows of res.data.res) {
+                data.push({
+                    name: rows[0],
+                    country: rows[3],
+                    total_budget: 1337, // TODO: fix this with backend m88
+                    total_teams: 1337,
+                    country_logo: "tr" // herkes Türk hocam
+                });
+            }
+
             this.setState({
-                data: res.data.data,
-                pages: res.data.num_pages,
+                data: data,
+                pages: res.data.num_rows,
                 loading: false
             });
         });
