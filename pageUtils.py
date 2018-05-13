@@ -159,13 +159,17 @@ def getLeagueInfo(leagueName, leagueStart):
             league_name = row[0]
             league_start = row[1]
             league_country = row[3]
-            return {'league_name': league_name,
-                    'league_start': league_start,
-                    'league_country': league_country, 
-                    'result': 'success'}
-
         except DatabaseError:
             return  {'result': 'failed'};
+
+        cursor.execute("SELECT * FROM LeagueSponsor WHERE league_name = %s AND league_start= %s", [leagueName, leagueStart])
+        row = cursor.fetchone();
+        
+        return {'league_name': league_name,
+                    'league_start': league_start,
+                    'league_country': league_country,
+                    'sponsor' : row[0], 
+                    'result': 'success'}
 
 def getClubsInfo(clubName):
      with connection.cursor() as cursor:
@@ -186,7 +190,7 @@ def getClubsInfo(clubName):
         row = cursor.fetchone();
         director_name = row[0] + " " + row[1]
 
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
         row = cursor.fetchone();
         coach_name = row[0] + " " + row[1]
 
@@ -200,5 +204,38 @@ def getClubsInfo(clubName):
                 'coach_name' : coach_name,
                 'result': 'success'}
 
+def getCoachInfo(username):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT * FROM Coach WHERE coach_username = %s", [username])
+            row = cursor.fetchone()
+
+            exp = rows[1]
+        except DatabaseError:
+            return  {'result': 'failed'};
+        
+        cursor.execute("""SELECT p.first_name, p.last_name, s.date_of_birth, s.salary, co.club_name
+        FROM CurrentOccupation co, Coach c, Person p, Sportsman s 
+        WHERE c.coach_username = co.sportsman_username 
+        AND p.username = co.sportsman_username 
+        AND s.spartsman_username = p.username
+        AND c.coach_username = %s"""
+        , [username])
+        row = cursor.fetchone()
+
+        full_name = row[0] + " " + row[1]
+        date_of_birth = row[2]
+        salary = row[3]
+        club_name = row[4]
+
+        return {
+            'full_name' : full_name,
+            'exprience' : exp, 
+            'date_of_birth' : date_of_birth,
+            'salary' : salary,
+            'club_name' : club_name,
+            'result' : 'success' 
+        }
+def getC
             
 
