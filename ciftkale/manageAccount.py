@@ -40,7 +40,6 @@ def forgotPassword(phone):
             requests.post("https://g9o2hlg1x6.execute-api.us-east-1.amazonaws.com/prod/sms_aws", payload)
 
             cursor.execute("UPDATE person SET hashed_password = %s WHERE  phone_number = %s",[new_password, phone])
-            row2 = cursor.fetchone()
             return {'result': 'success'}
     else:
         return {'result': 'failed'}
