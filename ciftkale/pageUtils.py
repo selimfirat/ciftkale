@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.u
 
 import dj_database_url
 import django_heroku
@@ -51,9 +52,11 @@ def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", fil
         'result': 'success'
     }
 
-def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", sort_query = "", items_per_page = 15, page_num = 0):
+def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filter_agent ="", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
+            cursor.execute("SELECT a.agent_username FROM Agent a, Person p a.agent_username = p.username AND ( p.first_name ILIKE %s OR p.last_name ILIKE %s)", [filter_agent, filter_agent])
+            agent_username = cursor.fetchone()[0]
             cursor.execute(
                 """
                 SELECT * FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
@@ -61,14 +64,15 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", sort
                 AND p.player_username = co.sportsman_username 
                 AND c.club_name ILIKE %s 
                 AND p.nationality ILIKE %s 
-                AND (u.first_name + ' ' + u.last_name ILIKE %s OR u.last_name + ' ' + u.first_name ILIKE %s)
+                AND (u.first_name + ' ' + u.last_name ILIKE %s OR u.last_name + ' ' + u.first_name ILIKE %s) ,
+                AND p.agent_username = %s
                 """ + sort_query + 
                 " LIMIT %s OFFSET %s" , 
-                # BİTTİ AMK
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
                 "%" + filter_name + "%",
                 "%" + filter_name + "%", 
+                "%" + agent_username + "%",
                 items_per_page, 
                 page_num * items_per_page]
             )
@@ -146,7 +150,7 @@ def getPlayerInfo(username):
             'assist' : assist,
             'shot' : shot,
             'yellow_card' : yellow_card,
-            'red_card' : red_card,
+            'red_card' : red_card
             'result' : 'success'
         }
 
@@ -235,4 +239,35 @@ def getCoachInfo(username):
             'club_name' : club_name,
             'result' : 'success' 
         }
+def getDirectorInfo(username):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Person p WHERE p.username = co.sportsman_username AND p.username = %s" [username])
+            row = cursor.fetchone()
+            full_name = row[0] + " " + row[1]
+        except DatabaseError:
+            return  {'result': 'failed'};
 
+        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM CurrentOccupation co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s" [username])
+        row = cursor.fetchone()
+        date_of_birth = row[0]
+        salary = row[1]
+        club_name = row [2]
+
+        return {
+            'full_name' : full_name,
+            'date_of_birth' : date_of_birth,
+            'salary' : salary,
+            'club_name' : club_name
+            'result' : 'success'
+        }
+
+def getAgentInfo(username):
+     with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a Person p WHERE p.username = a.agent_username AND p.username = %s" [username])
+            row = cursor.fetchone()
+            full_name = row[0] + " " + row[1]
+
+        except DatabaseError:
+            return  {'result': 'failed'};
