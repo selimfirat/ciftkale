@@ -20,7 +20,7 @@ def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", it
             return  {'result': 'failed'};
         try:
             cursor.execute("SELECT COUNT(*) FROM league ")
-            count = int(cursor.fetchone());
+            count = int(cursor.fetchone()[0]);
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -41,7 +41,7 @@ def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", fil
             return  {'result': 'failed'};
         try:
             cursor.execute("SELECT COUNT(*) FROM club")
-            count = int(cursor.fetchone());
+            count = int(cursor.fetchone()[0]);
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -80,7 +80,7 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
             return  {'result': 'failed'};
         try:
             cursor.execute("SELECT COUNT(*) FROM Player ")
-            count = int(cursor.fetchone());
+            count = int(cursor.fetchone()[0]);
         except DatabaseError:
             return  {'result': 'failed'};
 
