@@ -118,16 +118,15 @@ class ListRealLeagues extends Component {
             state.filtered
         ).then(res => {
             console.log(res);
-            let data = [];
-            for (let rows of res.data.res) {
-                data.push({
+
+            let data = res.data.res.map(rows => ({
                     name: rows[0],
                     country: rows[3],
                     total_budget: 1337, // TODO: fix this with backend m88
                     total_teams: 1337,
                     country_logo: "tr" // herkes Türk hocam
-                });
-            }
+                })
+            );
 
             this.setState({
                 data: data,
