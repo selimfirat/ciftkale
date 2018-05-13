@@ -9,6 +9,8 @@ from .pageUtils import *
 from .accounting import *
 from .manageAccount import *
 
+import json
+
 @csrf_exempt
 def login_view(request):
   r = json.loads(request.body)
