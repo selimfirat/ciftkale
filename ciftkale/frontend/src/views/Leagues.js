@@ -20,16 +20,8 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
     let params = {
         'page': page,
         'pageSize': pageSize,
+        'sortInfo': sortInfo
     };
-    
-
-    for (let info of sortInfo) {
-        if (info.id === 'country') {
-            params['sortCountry'] = info.desc;
-        } else if (info.id === 'name') {
-            params['sortLeague'] = info.desc;
-        }
-    }
     
     for (let info of filterInfo) {
         if (info.id === 'country') {
@@ -130,7 +122,7 @@ class ListRealLeagues extends Component {
 
             this.setState({
                 data: data,
-                pages: res.data.num_rows,
+                pages: Math.ceil(res.data.num_rows / state.pageSize),
                 loading: false
             });
         });
