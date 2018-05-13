@@ -11,14 +11,10 @@ from .manageAccount import *
 
 @csrf_exempt
 def login_view(request):
-  try:
-    username = request.POST['username']
-    password = request.POST['password']
-    response = login(username, password)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  username = request.POST['username']
+  password = request.POST['password']
+  response = login(username, password)
+  return JsonResponse(response)
 
 @csrf_exempt
 def register_view(request):
