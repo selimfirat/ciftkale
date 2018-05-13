@@ -85,20 +85,24 @@ def changeusername_view(request):
 def leagues_view(request):
   page          = int(request.GET['page'])
   pageSize      = int(request.GET['pageSize'])
-  sortInfo      = request.GET.get('sortInfo', None)
+  sortInfo      = request.GET.get('sortInfo')
   filterCountry = request.GET.get('filterCountry', '')
   filterLeague  = request.GET.get('filterLeague', '')
 
   sortQuery = ""
   if sortInfo:
+    sortInfo = json.loads(sortInfo)
     for info in sortInfo:
-      if len(sortQuery) != 0:
+      print(info)
+      if len(sortQuery) == 0:
+        sortQuery = " ORDER BY " # güdükbay
+      else:
         sortQuery += ","
       
-      if info.id == 'country':
-        sortQuery += f" league_country {'DESC' if info.desc else 'ASC'} "
-      elif info.id == 'name':
-        sortQuery += f" league_name {'DESC' if info.desc else 'ASC'} "  
+      if info['id'] == 'country':
+        sortQuery += f" league_country {'DESC' if info['desc'] else 'ASC'} "
+      elif info['id'] == 'name':
+        sortQuery += f" league_name {'DESC' if info['desc'] else 'ASC'} "  
 
   response = getLeaguesTable(filterCountry, filterLeague, sortQuery, pageSize, page)
   return JsonResponse(response)
