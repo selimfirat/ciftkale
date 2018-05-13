@@ -130,7 +130,7 @@ class ListRealLeagues extends Component {
 
             this.setState({
                 data: data,
-                pages: res.data.num_rows,
+                pages: Math.ceil(res.data.num_rows / state.pageSize),
                 loading: false
             });
         });
