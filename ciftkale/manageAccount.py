@@ -33,7 +33,7 @@ def forgotPassword(phone):
             new_password = password_generator()
             payload = {
                 "message": "You have reset your password. Your new password for CiftKale transfer market is " + new_password,
-                "phoneNumber": "+905396445163",
+                "phoneNumber": phone,
                "senderId": "CiftKale",
                "smsType": "Transactional"
             }
