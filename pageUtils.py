@@ -1,17 +1,17 @@
 from django.contrib import admin
-from django.urls import path, re_path, include
-import os
+from django.u
+
 import dj_database_url
 import django_heroku
+
 from django.db import connection
 import string
 import random
 
 from django.db.utils import DatabaseError
-
 import name_tools #REQUIRES NAME_TOOLS TO BE DOWNLOADED
 
-def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", items_per_page, page_num):
+def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT * FROM league WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
@@ -31,7 +31,7 @@ def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", it
         'result': 'success'
     }
 
-def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", items_per_page, page_num):
+def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         #HAKAN coach ve Director filtrelemerini halledecek...
         try:
@@ -52,7 +52,7 @@ def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", fil
         'result': 'success'
     }
 
-def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", sort_query = "", items_per_page, page_num):
+def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
             cursor.execute(
