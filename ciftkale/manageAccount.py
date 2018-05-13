@@ -29,7 +29,8 @@ def forgotPassword(phone):
         row = cursor.fetchone()
     if (row is not None ):
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE SET hashed_password = %s  FROM person WHERE  phone_number = %s",[password_generator(), phone])
+            new_password = password_generator()
+            cursor.execute("UPDATE person SET hashed_password = %s WHERE  phone_number = %s",[new_password, phone])
             row2 = cursor.fetchone()
             return {'result': 'success'}
     else:

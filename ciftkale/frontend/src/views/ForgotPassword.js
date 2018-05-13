@@ -32,7 +32,7 @@ class ForgotPassword extends Component {
 
 
       axios
-          .post("/api/resetpasssword", { phone: this.state.phone })
+          .post("https://ciftkale.herokuapp.com/api/forgotpassword", { phone: this.state.phone })
           .then(res => {
               let d = res.data;
 
