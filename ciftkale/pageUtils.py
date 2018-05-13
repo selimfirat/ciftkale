@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.u
 
 import dj_database_url
 import django_heroku
