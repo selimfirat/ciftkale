@@ -66,9 +66,9 @@ class Register extends Component {
             full_name: this.state.full_name,
             username: this.state.username,
             phone: this.state.phone,
-            password: this.state.password
+            password: this.state.password,
+            email: this.state.email
         };
-
 
         this.setState({ err: err });
 
@@ -76,7 +76,7 @@ class Register extends Component {
 
 
                     axios
-                        .post("/api/register", { user })
+                        .post("https://ciftkale.herokuapp.com/api/register", user)
                         .then(res => {
                             let d = res.data;
 
@@ -85,14 +85,14 @@ class Register extends Component {
                             }
                             else {
                                 this.setState({ registered: false });
-                                err.push(d.result.error);
+                                err.push(d.result.error ? d.result.error : "There is already an user with that identity information you provide!");
+                                this.setState({ err: err });
                             }
                         })
                         .catch(err => this.setState({ registered: true }))
                     ;
 
         }
-        print(this.state.err)
     }
 
     render() {

@@ -72,7 +72,7 @@ export default class Login extends Component {
                   <Row className="justify-content-center">
                       <Col md="6">
                           <Alert color="danger" isOpen={ this.state.loginFail }>
-                              Username or password is wrong!
+                              Wrong username or password!
                           </Alert>
                       </Col>
                   </Row>
