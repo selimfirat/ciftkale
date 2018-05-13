@@ -11,121 +11,97 @@ from .manageAccount import *
 
 @csrf_exempt
 def login_view(request):
-  username = request.POST['username']
-  password = request.POST['password']
+  r = json.loads(request.body)
+  username = r['username']
+  password = r['password']
   response = login(username, password)
   return JsonResponse(response)
 
 @csrf_exempt
 def register_view(request):
-  try:
-    username  = request.POST['username']
-    password  = request.POST['password']
-    full_name = request.POST['full_name']
-    phone     = request.POST['phone']
-    email     = request.POST['email']
+  r = json.loads(request.body)
+  username  = r['username']
+  password  = r['password']
+  full_name = r['full_name']
+  phone     = r['phone']
+  email     = r['email']
 
-    response = register(username, password, full_name, email, phone)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  response = register(username, password, full_name, email, phone)
+  return JsonResponse(response)
 
 @csrf_exempt
 def forgotpassword_view(request):
-  try:
-    phone = request.POST['phone']
-    response = forgotPassword(phone)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  r = json.loads(request.body)
+  phone = r['phone']
+  response = forgotPassword(phone)
+  return JsonResponse(response)
 
 
 @csrf_exempt
 def changepassword_view(request):
-  try:
-    username         = request.POST['username']
-    current_password = request.POST['current_password']
-    new_password     = request.POST['new_password']
+  r = json.loads(request.body)
+  username         = r['username']
+  current_password = r['current_password']
+  new_password     = r['new_password']
 
-    response = forgotPassword(username, current_password, new_password)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  response = forgotPassword(username, current_password, new_password)
+  return JsonResponse(response)
 
 @csrf_exempt
 def deleteownaccount_view(request):
-  try:
-    username         = request.POST['username']
-    current_password = request.POST['current_password']
+  r = json.loads(request.body)
+  username         = r['username']
+  current_password = r['current_password']
 
-    #response = deleteOwnAccount(username, current_password)
-    response = {'result': 'success'}
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  #response = deleteOwnAccount(username, current_password)
+  response = {'result': 'success'}
+  return JsonResponse(response)
 
 @csrf_exempt
 def changephoto_view(request):
-  try:
-    #username         = request.POST['username']
-    #current_password = request.POST['current_password']
+  r = json.loads(request.body)
+  #username         = r['username']
+  #current_password = r['current_password']
 
-    #response = deleteOwnAccount(username, current_password)
-    response = {'result': 'success'}
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  #response = deleteOwnAccount(username, current_password)
+  response = {'result': 'success'}
+  response = {'result': 'failed', 'error': 'API Misuse'}
+  return JsonResponse(response)
 
 @csrf_exempt
 def changeusername_view(request):
-  try:
-    username         = request.POST['username']
-    current_password = request.POST['current_password']
-    new_username     = request.POST['new_username']
+  r = json.loads(request.body)
+  username         = r['username']
+  current_password = r['current_password']
+  new_username     = r['new_username']
 
-    response = changeUsername(username, new_username, current_password)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  response = changeUsername(username, new_username, current_password)
+  return JsonResponse(response)
 
 
 @csrf_exempt
 def leagues_view(request):
-  try:
-    page          = request.GET['page']
-    pageSize      = request.GET['pageSize']
-    sortCountry   = request.GET.get('sortCountry', None)
-    sortLeague    = request.GET.get('sortLeague', None)
-    filterCountry = request.GET.get('filterCountry', '')
-    filterLeague  = request.GET.get('filterLeague', '')
+  page          = request.GET['page']
+  pageSize      = request.GET['pageSize']
+  sortCountry   = request.GET.get('sortCountry', None)
+  sortLeague    = request.GET.get('sortLeague', None)
+  filterCountry = request.GET.get('filterCountry', '')
+  filterLeague  = request.GET.get('filterLeague', '')
 
-    sortQuery = ""
-    if sortCountry is not None:
-      sortQuery += f" league_country {'DESC' if sortCountry else 'ASC'} "
-    if sortLeague is not None:
-      sortLeague += f", league_name {'DESC' if sortLeague else 'ASC'} "
+  sortQuery = ""
+  if sortCountry is not None:
+    sortQuery += f" league_country {'DESC' if sortCountry else 'ASC'} "
+  if sortLeague is not None:
+    sortLeague += f", league_name {'DESC' if sortLeague else 'ASC'} "
 
-    response = getLeaguesTable(filterCountry, filterLeague, sortQuery, pageSize, page)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  response = getLeaguesTable(filterCountry, filterLeague, sortQuery, pageSize, page)
+  return JsonResponse(response)
 
 
 @csrf_exempt
 def league_view(request):
-  try:
-    leagueName  = request.GET['leagueName']
-    leagueStart = request.GET['leagueStart']
+  leagueName  = request.GET['leagueName']
+  leagueStart = request.GET['leagueStart']
 
-    response = getLeagueInfo(leagueName, leagueStart)
-  except:
-    response = {'result': 'failed', 'error': 'API Misuse'}
-  finally:
-    return JsonResponse(response)
+  response = getLeagueInfo(leagueName, leagueStart)
+  return JsonResponse(response)
