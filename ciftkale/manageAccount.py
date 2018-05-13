@@ -33,14 +33,13 @@ def forgotPassword(phone):
             new_password = password_generator()
             payload = {
                 "message": "You have reset your password. Your new password for CiftKale transfer market is " + new_password,
-                "phoneNumber": "+905396445163",
+                "phoneNumber": phone,
                "senderId": "CiftKale",
                "smsType": "Transactional"
             }
             requests.post("https://g9o2hlg1x6.execute-api.us-east-1.amazonaws.com/prod/sms_aws", payload)
 
             cursor.execute("UPDATE person SET hashed_password = %s WHERE  phone_number = %s",[new_password, phone])
-            row2 = cursor.fetchone()
             return {'result': 'success'}
     else:
         return {'result': 'failed'}
