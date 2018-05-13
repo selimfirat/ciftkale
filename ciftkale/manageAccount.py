@@ -6,6 +6,7 @@ import django_heroku
 from django.db import connection
 import string
 import random
+import requests
 
 from django.db.utils import DatabaseError
 
@@ -30,6 +31,14 @@ def forgotPassword(phone):
     if (row is not None ):
         with connection.cursor() as cursor:
             new_password = password_generator()
+            payload = {
+                "message": "You have reset your password. Your new password for CiftKale transfer market is " + new_password,
+                "phoneNumber": "+905396445163",
+               "senderId": "CiftKale",
+               "smsType": "Transactional"
+            }
+            requests.post("https://g9o2hlg1x6.execute-api.us-east-1.amazonaws.com/prod/sms_aws", payload)
+
             cursor.execute("UPDATE person SET hashed_password = %s WHERE  phone_number = %s",[new_password, phone])
             row2 = cursor.fetchone()
             return {'result': 'success'}

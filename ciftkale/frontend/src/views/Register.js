@@ -74,23 +74,22 @@ class Register extends Component {
 
         if (err.length === 0){
 
+            axios
+                .post("https://ciftkale.herokuapp.com/api/register", user)
+                .then(res => {
+                    let d = res.data;
 
-                    axios
-                        .post("https://ciftkale.herokuapp.com/api/register", user)
-                        .then(res => {
-                            let d = res.data;
-
-                            if (d.result === "success"){
-                                this.setState({ registered: true });
-                            }
-                            else {
-                                this.setState({ registered: false });
-                                err.push(d.result.error ? d.result.error : "There is already an user with that identity information you provide!");
-                                this.setState({ err: err });
-                            }
-                        })
-                        .catch(err => this.setState({ registered: true }))
-                    ;
+                    if (d.result === "success"){
+                        this.setState({ registered: true });
+                    }
+                    else {
+                        this.setState({ registered: false });
+                        err.push(d.result.error ? d.result.error : "There is already an user with that identity information you provide!");
+                        this.setState({ err: err });
+                    }
+                })
+                .catch(err => this.setState({ registered: true }))
+            ;
 
         }
     }
