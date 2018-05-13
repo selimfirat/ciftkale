@@ -16,6 +16,7 @@ python_version = "3.6"
 django-heroku = "*"
 gunicorn = "*"
 name_tools = "*"
+django-cors-headers = "*"
 
 
 [dev-packages]
