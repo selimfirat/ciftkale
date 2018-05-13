@@ -90,14 +90,15 @@ def leagues_view(request):
   filterLeague  = request.GET.get('filterLeague', '')
 
   sortQuery = ""
-  for info in sortInfo:
-    if len(sortQuery) != 0:
-      sortQuery += ","
-    
-    if info.id == 'country':
-      sortQuery += f" league_country {'DESC' if info.desc 'ASC'} "
-    elif info.id == 'name':
-      sortQuery += f" league_name {'DESC' if info.desc 'ASC'} "  
+  if sortInfo:
+    for info in sortInfo:
+      if len(sortQuery) != 0:
+        sortQuery += ","
+      
+      if info.id == 'country':
+        sortQuery += f" league_country {'DESC' if info.desc else 'ASC'} "
+      elif info.id == 'name':
+        sortQuery += f" league_name {'DESC' if info.desc else 'ASC'} "  
 
   response = getLeaguesTable(filterCountry, filterLeague, sortQuery, pageSize, page)
   return JsonResponse(response)
