@@ -95,9 +95,9 @@ def leagues_view(request):
       sortQuery += ","
     
     if info.id == 'country':
-      sortQuery += f" league_country {'DESC' if info.desc 'ASC'} "
+      sortQuery += f" league_country {'DESC' if info.desc else 'ASC'} "
     elif info.id == 'name':
-      sortQuery += f" league_name {'DESC' if info.desc 'ASC'} "  
+      sortQuery += f" league_name {'DESC' if info.desc else 'ASC'} "  
 
   response = getLeaguesTable(filterCountry, filterLeague, sortQuery, pageSize, page)
   return JsonResponse(response)
