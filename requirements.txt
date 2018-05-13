@@ -1,1 +1,2 @@
 name_tools
+django-cors-headers
