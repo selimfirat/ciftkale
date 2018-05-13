@@ -83,8 +83,8 @@ def changeusername_view(request):
 
 @csrf_exempt
 def leagues_view(request):
-  page          = request.GET['page']
-  pageSize      = request.GET['pageSize']
+  page          = int(request.GET['page'])
+  pageSize      = int(request.GET['pageSize'])
   sortCountry   = request.GET.get('sortCountry', None)
   sortLeague    = request.GET.get('sortLeague', None)
   filterCountry = request.GET.get('filterCountry', '')
