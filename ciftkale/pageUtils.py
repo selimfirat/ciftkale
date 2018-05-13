@@ -257,7 +257,7 @@ def getDirectorInfo(username):
             'full_name' : full_name,
             'date_of_birth' : date_of_birth,
             'salary' : salary,
-            'club_name' : club_name
+            'club_name' : club_name,
             'result' : 'success'
         }
 
