@@ -14,7 +14,7 @@ import name_tools #REQUIRES NAME_TOOLS TO BE DOWNLOADED
 def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT * FROM league WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
+            cursor.execute("SELECT * FROM league NATURAL JOIN LeagueCountry WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
             "%" + filter_league + "%", items_per_page, page_num * items_per_page])
             rows = cursor.fetchall();
         except DatabaseError:
@@ -154,18 +154,51 @@ def getPlayerInfo(username):
 def getLeagueInfo(leagueName, leagueStart):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT * FROM League WHERE league_name = %s league_start= %s", [leagueName, leagueStart])
+            cursor.execute("SELECT * FROM League WHERE league_name = %s AND league_start= %s", [leagueName, leagueStart])
             row = cursor.fetchone();
             league_name = row[0]
             league_start = row[1]
             league_country = row[3]
             return {'league_name': league_name,
                     'league_start': league_start,
-                    'league_country': league_country }
+                    'league_country': league_country, 
+                    'result': 'success'}
 
         except DatabaseError:
             return  {'result': 'failed'};
 
-def getClubsInfo(teamName):
-    
+def getClubsInfo(clubName):
+     with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT * FROM Club WHERE club_name = %s ", [clubName])
+            row = cursor.fetchone();
+
+            long_name = row[0];
+            short_name = row[1];
+            date_of_foundation = row [3];
+            transfer_budget = row [4];
+            stadium = row[6]
+            country = [7]
+        except DatabaseError:
+            return  {'result': 'failed'};
+        
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        row = cursor.fetchone();
+        director_name = row[0] + " " + row[1]
+
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        row = cursor.fetchone();
+        coach_name = row[0] + " " + row[1]
+
+        return {'long_name' : long_name,
+                'short_name' : short_name,
+                'date_of_foundation': date_of_foundation,
+                'transfer_budget': transfer_budget,
+                'stadium': stadium,
+                'country': country,
+                'director_name' : director_name,
+                'coach_name' : coach_name,
+                'result': 'success'}
+
+            
 
