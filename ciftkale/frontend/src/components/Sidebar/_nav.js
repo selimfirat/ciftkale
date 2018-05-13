@@ -1,6 +1,6 @@
 export default {
   items: [
-      /*
+
       {
           title: true,
           name: 'Authentication',
@@ -13,19 +13,22 @@ export default {
       {
           name: "Login",
           url: "/login",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: false
       },
       {
           name: "Register",
           url: "/register",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: false
       },
       {
           name: "Forgot Password?",
           url: "/forgotpassword",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: false
       },
-*/
+
       {
           title: true,
           name: 'Account',
@@ -33,22 +36,26 @@ export default {
               element: '',        // required valid HTML5 element tag
               attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
           },
-          class: ''             // optional class names space delimited list for title item ex: "text-center"
+          class: '',
+          auth: true             // optional class names space delimited list for title item ex: "text-center"
       },
       {
           name: "Change Password",
           url: "/account/changepassword",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: true
       },
       {
           name: "Delete Own Account",
           url: "/account/deleteownaccount",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: true
       },
       {
           name: "Change Photo",
           url: "/account/changephoto",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: true
       },
       {
           name: "Change Username",
@@ -67,27 +74,27 @@ export default {
       },
       {
           name: "Leagues",
-          url: "/list/real/leagues",
+          url: "/leagues",
           icon: 'icon-star'
       },
       {
           name: "Teams",
-          url: "/list/real/teams",
+          url: "/teams",
           icon: 'icon-star'
       },
       {
           name: "Players",
-          url: "/list/real/players",
+          url: "/players",
           icon: 'icon-star'
       },
       {
           name: "All Transfer Offers",
-          url: "/list/real/offers",
+          url: "/offers",
           icon: 'icon-star'
       },
       {
           name: "Your Pending Offers",
-          url: "offers",
+          url: "/offers",
           icon: 'icon-star'
       }
   ]

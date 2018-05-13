@@ -17,12 +17,6 @@ import '../scss/core/_dropdown-menu-right.scss'
 // Containers
 import Full from './containers/Full/'
 
-// Views
-import Login from './views/Login/'
-import Register from './views/Register/'
-import Page404 from './views/Page404/'
-import Page500 from './views/Pages/Page500/'
-
 ReactDOM.render((
   <HashRouter>
     <Switch>
