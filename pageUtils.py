@@ -88,4 +88,84 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", sort
         'result': 'success'
     }
 
+def getPlayerInfo(username):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT * FROM Player WHERE player_username = %s", [username])
+            row = cursor.fetchone();
+            position = row[1]
+            kit_number = row[2]
+            weight = row[3]
+            height = row[4]
+            dominant_foot = row[5]
+
+        except DatabaseError:
+            return  {'result': 'failed'};
+        
+        cursor.execute("SELECT * FROM Person WHERE username = %s", [username])
+        row = cursor.fetchone();
+        full_name = row[2] + " " + row[3]
+
+        cursor.execute("SELECT * FROM Sportsman WHERE sportsman_username = %s", [username])
+        row = cursor.fetchone();
+        salary = row[2]
+
+        cursor.execute("SELECT co.club_name FROM Player p, CurrentOccupations co WHERE co.sportsman_username = %s", [username])
+        row = cursor.fetchone();
+        team = row[0]
+
+        cursor.execute("SELECT count(*) FROM Stat WHERE player_username = %s AND description = 'goal' ", [username])
+        row = cursor.fetchone();
+        goal = row[0]
+
+        cursor.execute("SELECT count(*) FROM Stat WHERE player_username = %s AND description = 'assist' ", [username])
+        row = cursor.fetchone();
+        assist = row[0]
+
+        cursor.execute("SELECT count(*) FROM Stat WHERE player_username = %s AND description = 'shot' ", [username])
+        row = cursor.fetchone();
+        shot = row[0]
+
+        cursor.execute("SELECT count(*) FROM Stat WHERE player_username = %s AND description = 'yellow_card' ", [username])
+        row = cursor.fetchone();
+        yellow_card = row[0]
+
+        cursor.execute("SELECT count(*) FROM Stat WHERE player_username = %s AND description = 'red_card' ", [username])
+        row = cursor.fetchone();
+        red_card = row[0]
+
+        return {
+            'position' : position,
+            'kit_number' : kit_number,
+            'weight' : weight,
+            'height' : height,
+            'dominant_foot' : dominant_foot,
+            'full_name' : full_name, 
+            'salary' : salary,
+            'club' : team,
+            'goal' : goal,
+            'assist' : assist,
+            'shot' : shot,
+            'yellow_card' : yellow_card,
+            'red_card' : red_card
+            'result' : 'success'
+        }
+
+def getLeagueInfo(leagueName, leagueStart):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT * FROM League WHERE league_name = %s league_start= %s", [leagueName, leagueStart])
+            row = cursor.fetchone();
+            league_name = row[0]
+            league_start = row[1]
+            league_country = row[3]
+            return {'league_name': league_name,
+                    'league_start': league_start,
+                    'league_country': league_country }
+
+        except DatabaseError:
+            return  {'result': 'failed'};
+
+def getClubsInfo(teamName):
+    
 
