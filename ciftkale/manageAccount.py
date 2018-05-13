@@ -47,22 +47,22 @@ def changePassword(username, currentPass, newPass):
     else:
         return {'result': 'failed'};
     
-    def changeUsername(curUser, newUser, password):
+def changeUsername(curUser, newUser, password):
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT username FROM person WHERE username =%s AND hashed_password = %s", [curUser, password])
+            row = cursor.fetchone()
+    if (row is not None ):
         with connection.cursor() as cursor:
-                cursor.execute("SELECT username FROM person WHERE username =%s AND hashed_password = %s", [curUser, password])
-                row = cursor.fetchone()
-        if (row is not None ):
-            with connection.cursor() as cursor:
-                try:
-                    cursor.execute("UPDATE SET username = %s  WHERE username =%s", [newUser, curUser]);
-                    row2 = cursor.fetchone();
+            try:
+                cursor.execute("UPDATE SET username = %s  WHERE username =%s", [newUser, curUser]);
+                row2 = cursor.fetchone();
 
-                except DatabaseError:
-                    return  {'result': 'failed'};
+            except DatabaseError:
+                return  {'result': 'failed'};
 
-                return {'result': 'success'};
-        else:
-            return {'result': 'failed'};
+            return {'result': 'success'};
+    else:
+        return {'result': 'failed'};
 
 
     

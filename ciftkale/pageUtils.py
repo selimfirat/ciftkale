@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.u
 
 import dj_database_url
 import django_heroku
@@ -147,7 +146,7 @@ def getPlayerInfo(username):
             'assist' : assist,
             'shot' : shot,
             'yellow_card' : yellow_card,
-            'red_card' : red_card
+            'red_card' : red_card,
             'result' : 'success'
         }
 
@@ -236,6 +235,4 @@ def getCoachInfo(username):
             'club_name' : club_name,
             'result' : 'success' 
         }
-def getC
-            
 

@@ -5,9 +5,9 @@ from django.contrib.auth.hashers import *
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connection
 
-from pageUtils import *
-from accounting import *
-from manageAccount import *
+from .pageUtils import *
+from .accounting import *
+from .manageAccount import *
 
 @csrf_exempt
 def login_view(request):
