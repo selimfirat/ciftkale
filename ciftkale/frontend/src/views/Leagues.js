@@ -20,9 +20,9 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
     let params = {
         'page': page,
         'pageSize': pageSize,
-        'sortInfo': sortInfo
+        'sortInfo': JSON.stringify(sortInfo)
     };
-    
+
     for (let info of filterInfo) {
         if (info.id === 'country') {
             params['filterCountry'] = info.value;

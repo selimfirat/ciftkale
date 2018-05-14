@@ -50,11 +50,10 @@ def changePassword(username, currentPass, newPass):
         row = cursor.fetchone()
     if (row is not None ):
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE SET hashed_password = %s  WHERE username =%s", [newPass, username]);
-            row2 = cursor.fetchone();
+            cursor.execute("UPDATE person SET hashed_password = %s WHERE username =%s", [newPass, username]);
             return {'result': 'success'};
     else:
-        return {'result': 'failed'};
+        return {'result': 'failed', "error": "The current password you entered is wrong!" };
     
 def changeUsername(curUser, newUser, password):
     with connection.cursor() as cursor:
@@ -63,15 +62,14 @@ def changeUsername(curUser, newUser, password):
     if (row is not None ):
         with connection.cursor() as cursor:
             try:
-                cursor.execute("UPDATE SET username = %s  WHERE username =%s", [newUser, curUser]);
-                row2 = cursor.fetchone();
+                cursor.execute("UPDATE person SET username = %s  WHERE username =%s", [newUser, curUser]);
 
             except DatabaseError:
-                return  {'result': 'failed'};
+                return  {'result': 'failed', "error": "New username you entered exists! Please try a different username."};
 
             return {'result': 'success'};
     else:
-        return {'result': 'failed'};
+        return {'result': 'failed', "error": "The current password you entered is wrong!" };
 
 
     
