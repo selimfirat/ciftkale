@@ -29,7 +29,7 @@ def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", it
         'result': 'success'
     }
 
-def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", filter_standing = "", items_per_page = 15, page_num = 0):
+def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", filter_standing = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
             cursor.execute("""
@@ -41,9 +41,9 @@ def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", fi
             AND c.league_name ILIKE %s 
             AND c.club_name ILIKE %s 
             AND ch.coach_username ILIKE %s
-            AND d.director_username ILIKE %s
+            AND d.director_username ILIKE %s  
             AND c.standing::varchar ILIKE %s
-            """ + sort_query + " LIMIT %s OFFSET %s" , 
+            """ + sort_query + "  LIMIT %s OFFSET %s", 
             ["%" + filter_country + "%", 
             "%" + filter_league + "%", 
             "%" + filter_team + "%", 
@@ -85,7 +85,7 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 AND p.nationality ILIKE %s 
                 AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
                 AND p.agent_username ILIKE %s
-                AND p.overall_score::varchar ILIKE %s
+                AND p.overall_score::varchar ILIKE %s  
                 """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
@@ -284,7 +284,7 @@ def getDirectorInfo(username):
 def getAgentInfo(username):
      with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a, Person p WHERE p.username = a.agent_username AND p.username = %s" [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a, Person p WHERE p.username = a.agent_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
 

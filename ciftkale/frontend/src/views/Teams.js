@@ -89,7 +89,8 @@ const columns = [
                 accessor: "standing",
                 Header: "Standing",
                 width: 80,
-                sortable: false
+                sortable: true,
+                filterable: true
             },
             {
                 accessor: "country",
