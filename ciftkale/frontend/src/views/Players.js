@@ -52,7 +52,7 @@ const columns = [
                             value={ team }
                             style={{ width: '100%' }}
                         />)},
-                Cell: (row) => ( <Link to={"/list/real/teams/" + row.value}>{row.value}</Link>),
+                Cell: (row) => ( <Link to={"/teams/" + row.value}>{row.value}</Link>),
                 filterAll: true,
             }
         ]
@@ -81,7 +81,7 @@ const columns = [
                             style={{ width: '100%' }}
                         />)},
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/players?country=" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/players?country=" + row.value}>{row.value}</Link>)
 
             },
             {
@@ -96,7 +96,7 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/players/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/players/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: 'overall',

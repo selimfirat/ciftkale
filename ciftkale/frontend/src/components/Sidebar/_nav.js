@@ -8,7 +8,8 @@ export default {
               element: '',        // required valid HTML5 element tag
               attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
           },
-          class: ''             // optional class names space delimited list for title item ex: "text-center"
+          class: '',             // optional class names space delimited list for title item ex: "text-center"
+          auth: false
       },
       {
           name: "Login",
@@ -27,6 +28,44 @@ export default {
           url: "/forgotpassword",
           icon: 'icon-star',
           auth: false
+      },
+
+
+      {
+          title: true,
+          name: 'Football',
+          wrapper: {            // optional wrapper object
+              element: '',        // required valid HTML5 element tag
+              attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
+          },
+          class: ''             // optional class names space delimited list for title item ex: "text-center"
+      },
+      {
+          name: "Leagues",
+          url: "/leagues",
+          icon: 'icon-star'
+      },
+      {
+          name: "Teams",
+          url: "/teams",
+          icon: 'icon-star'
+      },
+      {
+          name: "Players",
+          url: "/players",
+          icon: 'icon-star'
+      },
+      {
+          name: "All Transfer Offers",
+          url: "/offers",
+          icon: 'icon-star',
+          auth: true
+      },
+      {
+          name: "Your Pending Offers",
+          url: "/offers",
+          icon: 'icon-star',
+          auth: true
       },
 
       {
@@ -60,42 +99,14 @@ export default {
       {
           name: "Change Username",
           url: "/account/changeusername",
-          icon: 'icon-star'
-      },
-
-      {
-          title: true,
-          name: 'Football',
-          wrapper: {            // optional wrapper object
-              element: '',        // required valid HTML5 element tag
-              attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
-          },
-          class: ''             // optional class names space delimited list for title item ex: "text-center"
+          icon: 'icon-star',
+          auth: true
       },
       {
-          name: "Leagues",
-          url: "/leagues",
-          icon: 'icon-star'
-      },
-      {
-          name: "Teams",
-          url: "/teams",
-          icon: 'icon-star'
-      },
-      {
-          name: "Players",
-          url: "/players",
-          icon: 'icon-star'
-      },
-      {
-          name: "All Transfer Offers",
-          url: "/offers",
-          icon: 'icon-star'
-      },
-      {
-          name: "Your Pending Offers",
-          url: "/offers",
-          icon: 'icon-star'
+          name: "Logout",
+          url: "/account/logout",
+          icon: 'icon-star',
+          auth: true
       }
   ]
 };

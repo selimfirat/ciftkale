@@ -46,7 +46,7 @@ def changepassword_view(request):
   current_password = r['current_password']
   new_password     = r['new_password']
 
-  response = forgotPassword(username, current_password, new_password)
+  response = changePassword(username, current_password, new_password)
   return JsonResponse(response)
 
 @csrf_exempt

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText, Alert} from 'reactstrap';
+import axios from 'axios';
 
 class ChangeUsername extends Component {
     constructor() {
@@ -10,8 +11,10 @@ class ChangeUsername extends Component {
             success: false,
             invalid_username: false,
             password: "",
-            new_username: ""
-        }
+            new_username: "",
+            new_username_exists: false,
+            err: ""
+        };
 
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
 
@@ -22,38 +25,49 @@ class ChangeUsername extends Component {
             this.setState({ invalid_username: true });
 
 
+        let new_username = this.state.new_username;
+        let username = localStorage["username"];
+        let password = this.state.password;
+
+        axios
+            .post("https://ciftkale.herokuapp.com/api/changeusername", { username: username, password: password, new_username: new_username })
+            .then(res => {
+                let d = res.data;
+
+                if (d.result === "success")
+                    this.setState({ success: true, err: "" });
+                else {
+                    this.setState({ err: d.error });
+                }
+
+            })
+            .catch(err => {
+
+                this.setState({ success: true, err: "" })
+            })
+        ;
+
         // axios check current password
-        this.setState({ wrong_current_password: true });
+       // this.setState({ wrong_current_password: true });
 
    //     return (<Redirect to="#/logout"></Redirect>)
     }
-
 
     render() {
         return (
             <div className="app flex-row align-items-center">
                 <Container>
-
-                    {this.state.wrong_current_password &&
+                    {this.state.err &&
                     <Row className="justify-content-center">
                         <Col md="6">
                             <Alert color="danger">
-                                The current password you entered is wrong!
-                            </Alert>
-                        </Col>
-                    </Row>
-                    }
-                    {this.state.invalid_username &&
-                    <Row className="justify-content-center">
-                        <Col md="6">
-                            <Alert color="danger">
-                                Your username is invalid. It must at least be 3 characters.
+                                {this.state.err}
                             </Alert>
                         </Col>
                     </Row>
                     }
 
-                    {this.state.registered &&
+                    {this.state.success &&
                     <Row className="justify-content-center">
                         <Col md="6">
                             <Alert color="success">

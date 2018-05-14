@@ -43,7 +43,7 @@ export default class Login extends Component {
                 let d = res.data;
 
                 if (d.result === "success")
-                    return this.loginSuccess();
+                    return this.loginSuccess(username);
                 else
                     return this.loginFail(d.error);
 

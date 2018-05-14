@@ -75,7 +75,7 @@ class ViewPlayer extends Component {
                                                               color="warning"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={<Link to={"/list/real/agents/" + player.agent}>{player.agent}</Link>} mainText="Agent" icon="fa fa-codiepie"
+                                                    <Widget02 header={<Link to={"/agents/" + player.agent}>{player.agent}</Link>} mainText="Agent" icon="fa fa-codiepie"
                                                               color="warning"/>
                                                 </Col>
                                             </Row>
