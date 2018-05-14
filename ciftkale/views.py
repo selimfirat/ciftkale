@@ -165,13 +165,11 @@ def players_view(request):
   filterPlayer    = request.GET.get('filterPlayer', '')
   filterTeam      = request.GET.get('filterTeam', '')
   filterAgent     = request.GET.get('filterAgent', '')
-  filterOverall   = request.GET.get('filterOverall', '')
 
   sort_map = {
     'name': 'u.first_name || u.last_name',
     'country': 'p.nationality',
-    'team': 'c.club_name',
-    'overall': 'p.overall_score'
+    'team': 'c.club_name'
   }
 
   sortQuery = ""
@@ -186,7 +184,7 @@ def players_view(request):
       if info['id'] in sort_map:
         sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
 
-  response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, filterOverall, sortQuery, pageSize, page)
+  response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, sortQuery, pageSize, page)
   return JsonResponse(response)
 
 
@@ -216,4 +214,11 @@ def agent_view(request):
     username  = request.GET['username']
 
     response = getAgentInfo(username)
+    return JsonResponse(response)
+
+@csrf_exempt
+def club_view(request):
+    clubname  = request.GET['club_name']
+
+    response = getClubInfo(clubname)
     return JsonResponse(response)
