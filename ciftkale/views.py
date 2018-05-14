@@ -93,7 +93,6 @@ def leagues_view(request):
   if sortInfo:
     sortInfo = json.loads(sortInfo)
     for info in sortInfo:
-      print(info)
       if len(sortQuery) == 0:
         sortQuery = " ORDER BY " # güdükbay
       else:
