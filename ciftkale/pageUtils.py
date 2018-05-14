@@ -193,7 +193,7 @@ def getLeagueInfo(leagueName, leagueStart):
                     'sponsor' : row[0], 
                     'result': 'success'}
 
-def getClubsInfo(clubName):
+def getClubInfo(clubName):
      with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT * FROM Club WHERE club_name = %s ", [clubName])
