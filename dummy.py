@@ -1,11 +1,13 @@
 from django.db import connection
 from django.db.utils import DatabaseError
 from faker import Faker # pip install Faker, used for fake name generation
+from random import randint
 
 import csv
 import os
 import name_tools
 import random
+import string
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ciftkale.settings")
 
@@ -155,8 +157,29 @@ def director():
 			print('success')
 
 
+def shortNames():
 
-director()
+	characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	short_name = ""
+
+	with connection.cursor() as cursor:
+
+		cursor.execute("SELECT * FROM club")
+		clubs = cursor.fetchall()
+
+	with connection.cursor() as cursor:
+		for i in range(164):
+			short_name = ""
+			for j in range(0, 3):
+				short_name += random.choice(characters)
+			standing = randint(1, 25)
+			cursor.execute("UPDATE club SET short_name = %s, standing = %s WHERE club_name = %s", [short_name, standing, clubs[i][0]])
+
+
+
+#director()
 
 #inserter()
+
+shortNames()
 	
