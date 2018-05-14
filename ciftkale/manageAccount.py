@@ -63,7 +63,7 @@ def changeUsername(curUser, newUser, password):
     if (row is not None ):
         with connection.cursor() as cursor:
             try:
-                cursor.execute("UPDATE SET username = %s  WHERE username =%s", [newUser, curUser]);
+                cursor.execute("UPDATE person SET username = %s  WHERE username =%s", [newUser, curUser]);
 
             except DatabaseError:
                 return  {'result': 'failed', "error": "New username you entered exists! Please try a different username."};
