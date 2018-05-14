@@ -59,7 +59,8 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         'league': 'filterLeague',
         'name': 'filterTeam',
         'coach': 'filterCoach',
-        'director': 'filterDirector'
+        'director': 'filterDirector',
+        'standing': 'filterStanding'
     }
 
     for (let info of filterInfo) {
@@ -95,7 +96,6 @@ const columns = [
                 width: 150,
                 filterable: true,
                 Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, country), 1)
                     return (
                         <input
                             onChange={event => { onChange(event.target.value); country = event.target.value} }

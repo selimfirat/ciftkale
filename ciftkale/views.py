@@ -129,13 +129,15 @@ def clubs_view(request):
   filterTeam      = request.GET.get('filterTeam', '')
   filterCoach     = request.GET.get('filterCoach', '')
   filterDirector  = request.GET.get('filterDirector', '')
+  filterStanding  = request.GET.get('filterStanding', '')
 
   sort_map = {
     'country': 'c.club_name',
     'league': 'c.league_name',
     'name': 'c.club_name',
     'coach': 'ch.coach_username',
-    'director': 'd.director_username'
+    'director': 'd.director_username',
+    'standing': 'c.standing'
   }
 
   sortQuery = ""
@@ -150,5 +152,5 @@ def clubs_view(request):
       if info['id'] in sort_map:
         sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
 
-  response = getClubsTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, sortQuery, pageSize, page)
+  response = getClubsTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, filterStanding, sortQuery, pageSize, page)
   return JsonResponse(response)
