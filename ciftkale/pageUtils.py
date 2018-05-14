@@ -293,8 +293,8 @@ def getAgentInfo(username):
 
             players = []
 
-            for i in rows:
-                players[i] = rows[i][0] + " " + rows[i][1]
+            for i in range(len(rows)):
+                players.append(rows[i][0] + " " + rows[i][1])
 
             return {'name': full_name,
                     'players' : players,
