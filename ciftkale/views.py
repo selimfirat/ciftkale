@@ -201,8 +201,15 @@ def coach_view(request):
     return JsonResponse(response)
 
 @csrf_exempt
-def Director_view(request):
+def director_view(request):
     username  = request.GET['username']
 
     response = getDirectorInfo(username)
+    return JsonResponse(response)
+
+@csrf_exempt
+def agent_view(request):
+    username  = request.GET['username']
+
+    response = getAgentInfo(username)
     return JsonResponse(response)
