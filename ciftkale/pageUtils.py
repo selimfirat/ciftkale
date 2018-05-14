@@ -33,7 +33,7 @@ def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", fi
     with connection.cursor() as cursor:
         try:
             cursor.execute("""
-            SELECT c.*, ch.coach_username, d.director_username, count(*) OVER() as full_count 
+            SELECT c.standing, c.country, c.league_name, c.club_name, ch.coach_username, d.director_username, 1337, c.short_name, count(*) OVER() as full_count 
             FROM Club c, Coach ch, Director d, CurrentOccupations coch, CurrentOccupations cod 
             WHERE coch.sportsman_username = ch.coach_username AND cod.sportsman_username = d.director_username 
             AND coch.club_name = c.club_name AND cod.club_name = c.club_name

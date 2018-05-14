@@ -82,6 +82,7 @@ const columns = [
                 Header: " ",
                 width: 50,
                 sortable: false,
+                filterable: false,
                 Cell: (row) => (<i className={"flag-icon flag-icon-" + row.value}/>)
             },
             {
@@ -95,13 +96,6 @@ const columns = [
                 Header: "Country",
                 width: 150,
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); country = event.target.value} }
-                            value={ country }
-                            style={{ width: '100%' }}
-                        />)},
                 filterAll: true,
                 Cell: (row) => ( <Link to={"/teams?country=" + row.value}>{row.value}</Link>)
 
@@ -111,13 +105,6 @@ const columns = [
                 Header: 'Name',
                 width: 200,
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); league = event.target.value} }
-                            value={ league }
-                            style={{ width: '100%' }}
-                        />)},
                 filterAll: true,
                 Cell: (row) => ( <Link to={"/teams?league=" + row.value}>{row.value}</Link>)
             }
@@ -131,6 +118,7 @@ const columns = [
                 Header: ' ',
                 width: 50,
                 sortable: false,
+                filterable: false,
                 Cell: (row) => (<img style={{width: "24px", height: "24px" }} src={"img/clubs/" + row.value} alt=""/>)
             },
             {
@@ -209,10 +197,14 @@ class ListRealTeams extends Component {
             console.log(res);
 
             let data = res.data.res.map(rows => ({
-                    name: rows[0],
-                    country: rows[3],
-                    total_budget: 1337, // TODO: fix this with backend m88
-                    total_teams: 1337,
+                    standing: rows[0],
+                    country: rows[1],
+                    league: rows[2],
+                    name: rows[3],
+                    coach: rows[4],
+                    director: rows[5],
+                    budget: rows[6],
+                    short_name: rows[7],
                     country_logo: "tr" // herkes Türk hocam
                 })
             );
@@ -272,16 +264,6 @@ class ListRealTeams extends Component {
                           onFetchData={this.fetchNewData}
                           //defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]}) }
                           className="-striped -highlight"
-                          defaultSorted={[
-                              {
-                                  id: "name",
-                                  desc: true
-                              },
-                              {
-                                  id: "standing",
-                                  desc: true
-                              }
-                          ]}
                       />
                   </CardBody>
                 </Card>
