@@ -30,7 +30,7 @@ const coach = {
 class ViewCoach extends Component {
 
     componentWillMount() {
-        axios.get("https://ciftkale.herokuapp.com/api/agent/", {
+        axios.get("https://ciftkale.herokuapp.com/api/coach/", {
             params: {
                 name: this.props.match.params.id
             }
