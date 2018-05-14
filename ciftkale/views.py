@@ -118,19 +118,7 @@ def league_view(request):
 
   response = getLeagueInfo(leagueName, leagueStart)
   return JsonResponse(response)
-
-
-     if (info.id === 'country') {
-            params['filterCountry'] = info.value;
-        } else if (info.id === 'league') {
-            params['filterLeague'] = info.value;
-        } else if (info.id === 'name') {
-            params['filterTeam'] = info.value;
-        } else if (info.id === 'coach') {
-            params['filterCoach'] = info.value;
-        } else if (info.id === 'director') {
-            params['filterDirector'] = info.value;
-        }
+  
 @csrf_exempt
 def clubs_view(request):
   page            = int(request.GET['page'])
