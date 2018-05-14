@@ -53,17 +53,18 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         'sortInfo': JSON.stringify(sortInfo)
     };
 
+    filterMap = {
+        'country': 'filterCountry',
+        'league': 'filterLeague',
+        'name': 'filterTeam',
+        'coach': 'filterCoach',
+        'director': 'filterDirector'
+    }
+
     for (let info of filterInfo) {
-        if (info.id === 'country') {
-            params['filterCountry'] = info.value;
-        } else if (info.id === 'league') {
-            params['filterLeague'] = info.value;
-        } else if (info.id === 'name') {
-            params['filterTeam'] = info.value;
-        } else if (info.id === 'coach') {
-            params['filterCoach'] = info.value;
-        } else if (info.id === 'director') {
-            params['filterDirector'] = info.value;
+        let filterName = filterMap[info.id];
+        if (filterName) {
+            params[filterName] = info.value;
         }
     }
 
