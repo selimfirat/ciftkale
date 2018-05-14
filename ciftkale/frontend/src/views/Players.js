@@ -40,6 +40,7 @@ const columns = [
                 accessor: 'team_logo',
                 Header: ' ',
                 width: 50,
+                filterable: false,
                 sortable: false,
                 Cell: (row) => (<img style={{width: "24px", height: "24px" }} src={"img/clubs/" + row.value} alt=""/>)
             },
@@ -47,13 +48,6 @@ const columns = [
                 accessor: 'team',
                 Header: 'Name',
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); team = event.target.value} }
-                            value={ team }
-                            style={{ width: '100%' }}
-                        />)},
                 Cell: (row) => ( <Link to={"/teams/" + row.value}>{row.value}</Link>),
                 filterAll: true,
             }
@@ -67,6 +61,7 @@ const columns = [
                 Header: " ",
                 width: 50,
                 sortable: false,
+                filterable: false,
                 Cell: (row) => (<i className={"flag-icon flag-icon-" + row.value}></i>)
             },
             {
@@ -74,13 +69,6 @@ const columns = [
                 Header: "Nation",
                 width: 150,
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); country = event.target.value} }
-                            value={ country }
-                            style={{ width: '100%' }}
-                        />)},
                 filterAll: true,
                 Cell: (row) => ( <Link to={"/players?country=" + row.value}>{row.value}</Link>)
 
@@ -90,6 +78,7 @@ const columns = [
                 Header: " ",
                 width: 50,
                 sortable: false,
+                filterable: false,
                 Cell: (row) => (<img style={{width: "24px", height: "24px" }} src={"img/players/" + row.value} alt=""/>)
             },
             {
