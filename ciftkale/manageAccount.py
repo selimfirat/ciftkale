@@ -51,7 +51,6 @@ def changePassword(username, currentPass, newPass):
     if (row is not None ):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE person SET hashed_password = %s WHERE username =%s", [newPass, username]);
-            row2 = cursor.fetchone();
             return {'result': 'success'};
     else:
         return {'result': 'failed', "error": "The current password you entered is wrong!" };
