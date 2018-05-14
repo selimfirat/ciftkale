@@ -10,12 +10,14 @@ import {
 import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
 import { Link } from 'react-router-dom'
+import axios from 'axios';
 
 const qs = require('query-string');
 
 let team = "";
 let country = "";
 
+/*
 const data = [
     {
         team_logo: "barcelona.png",
@@ -28,6 +30,7 @@ const data = [
 
     }
 ];
+*/
 
 const columns = [
     {
@@ -45,7 +48,6 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, team), 1);
                     return (
                         <input
                             onChange={event => { onChange(event.target.value); team = event.target.value} }
@@ -73,7 +75,6 @@ const columns = [
                 width: 150,
                 filterable: true,
                 Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, country), 1)
                     return (
                         <input
                             onChange={event => { onChange(event.target.value); country = event.target.value} }
@@ -107,9 +108,41 @@ const columns = [
     },
 ];
 
+const requestData = (page, pageSize, sortInfo, filterInfo) => {
+    let params = {
+        'page': page,
+        'pageSize': pageSize,
+        'sortInfo': JSON.stringify(sortInfo)
+    };
+
+    let filterMap = {
+        'country': 'filterCountry',
+        'name': 'filterPlayer',
+        'team': 'filterTeam'
+    }
+
+    for (let info of filterInfo) {
+        let filterName = filterMap[info.id];
+        if (filterName) {
+            params[filterName] = info.value;
+        }
+    }
+
+    return axios.get('http://localhost:5000/api/players', { params: params });
+};
+
 
 class ListRealPlayers extends Component {
+    constructor(props){
+        super(props);
 
+        this.state = {
+            data: [],
+            pages: null,
+            loading: true
+        };
+        this.fetchNewData = this.fetchNewData.bind(this);
+    }
 
     componentDidUpdate() {
         const params = qs.parse(this.props.location.search);
@@ -118,7 +151,36 @@ class ListRealPlayers extends Component {
         country = params.country ? params.country : "";
     }
 
+    fetchNewData(state, instance) {
+        this.setState({ loading: true });
+
+        requestData(
+            state.page,
+            state.pageSize,
+            state.sorted,
+            state.filtered
+        ).then(res => {
+            console.log(res);
+
+            let data = res.data.res.map(rows => ({
+                    team: rows[0],
+                    country: rows[1],
+                    name: rows[2] + ' ' + rows[3],
+                    overall: rows[4],
+                    country_logo: "tr" // herkes Türk hocam
+                })
+            );
+
+            this.setState({
+                data: data,
+                pages: Math.ceil(res.data.num_rows / state.pageSize),
+                loading: false
+            });
+        });
+    }
+
     render() {
+        const {pages, data, loading} = this.state;
 
         return (
             <div className="animated fadeIn">
@@ -131,14 +193,19 @@ class ListRealPlayers extends Component {
                             <CardBody>
                                 <ReactTable
                                     data={data}
+                                    manual
+                                    filterable
+                                    pages={pages}
+                                    loading={loading}
                                     columns={columns}
                                     defaultPageSize={10}
-                                    defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]}) }
+                                    onFetchData={this.fetchNewData}
+                                    //defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]}) }
                                     className="-striped -highlight"
                                     defaultSorted={[
                                         {
                                             id: "name",
-                                            asc: true
+                                            desc: true
                                         }
                                     ]}
                                 />

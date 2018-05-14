@@ -154,3 +154,36 @@ def clubs_view(request):
 
   response = getClubsTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, filterStanding, sortQuery, pageSize, page)
   return JsonResponse(response)
+
+
+@csrf_exempt
+def players_view(request):
+  page            = int(request.GET['page'])
+  pageSize        = int(request.GET['pageSize'])
+  sortInfo        = request.GET.get('sortInfo')
+  filterCountry   = request.GET.get('filterCountry', '')
+  filterPlayer    = request.GET.get('filterPlayer', '')
+  filterTeam      = request.GET.get('filterTeam', '')
+  filterAgent     = request.GET.get('filterAgent', '')
+
+  sort_map = {
+    'name': 'u.first_name || u.last_name',
+    'country': 'p.nationality',
+    'team': 'c.club_name'
+  }
+
+  sortQuery = ""
+  if sortInfo:
+    sortInfo = json.loads(sortInfo)
+    for info in sortInfo:
+      if len(sortQuery) == 0:
+        sortQuery = " ORDER BY " # güdükbay
+      else:
+        sortQuery += ","
+      
+      if info['id'] in sort_map:
+        sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
+
+  response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, sortQuery, pageSize, page)
+  return JsonResponse(response)
+
