@@ -6,15 +6,18 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Button
+    Button,
+    NavLink
 } from 'reactstrap';
 import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
 import { Link } from 'react-router-dom'
 import Widget02 from './Widgets/Widget02';
+import axios from 'axios';
 
 const qs = require('query-string');
 
+/*
 const player = {
     name: "Sergi Roberto",
     img: "sergi_roberto.png",
@@ -29,9 +32,43 @@ const player = {
     team: "Barcelona",
     agent: "Hakan Türkmenoğlu"
 };
-
+*/
 class ViewPlayer extends Component {
 
+    componentWillMount() {
+        axios.get("https://ciftkale.herokuapp.com/api/player/", {
+            params: {
+                name: this.props.match.params.id
+            }
+        }).then((response) => {
+            this.setState({player: response.data})
+        });
+    }
+
+    constructor(props) {
+        super(props);
+
+
+        console.log(props.match.params.id);
+
+        this.state = {
+            player: {
+                name: "Sergi Roberto",
+                img: "sergi_roberto.png",
+                position_name: "Defence",
+                kit_number: 20,
+                weight: 68,
+                height: 178,
+                dominant_foot: "Right",
+                shoot_accuracy: 70,
+                salary: "1500000",
+                date_of_birth: "02/07/1992",
+                team: "Barcelona",
+                agent: "Hakan Türkmenoğlu"
+            }
+        };
+
+    }
 
     render() {
 
@@ -41,41 +78,41 @@ class ViewPlayer extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Player: {player.name}
+                                <i className="fa fa-align-justify"></i> Player: {this.state.player.name}
                             </CardHeader>
                                 <CardBody>
                                     <Row>
                                         <Col xs="12" sm="4" lg="1">
-                                            <img src={"img/players/" + player.img} alt=""/>
+                                            <img src={"img/players/" + this.state.player.img} alt=""/>
                                         </Col>
                                         <Col xs="12" sm="8" lg="11">
                                             <Row>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={player.name}
+                                                    <Widget02 header={this.state.player.name}
                                                               mainText="Name" icon="fa fa-wpexplorer" color="primary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={player.position_name} mainText="Position Name"
+                                                    <Widget02 header={this.state.player.position_name} mainText="Position Name"
                                                               icon="fa fa-wpexplorer" color="primary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={player.kit_number} mainText="Kit Number"
+                                                    <Widget02 header={this.state.player.kit_number} mainText="Kit Number"
                                                               icon="fa fa-wpexplorer" color="primary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={player.dominant_foot} mainText="Dominant Foot" icon="fa fa-mixcloud"
+                                                    <Widget02 header={this.state.player.dominant_foot} mainText="Dominant Foot" icon="fa fa-mixcloud"
                                                               color="secondary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={"$" + player.salary} mainText="Salary"
+                                                    <Widget02 header={"$" + this.state.player.salary} mainText="Salary"
                                                               icon="fa fa-mixcloud" color="secondary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={player.team} mainText="Team" icon="fa fa-codiepie"
+                                                    <Widget02 header={this.state.player.team} mainText="Team" icon="fa fa-codiepie"
                                                               color="warning"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={<Link to={"/agents/" + player.agent}>{player.agent}</Link>} mainText="Agent" icon="fa fa-codiepie"
+                                                    <Widget02 header={<Link to={"/agents/" + this.state.player.agent}>{this.state.player.agent}</Link>} mainText="Agent" icon="fa fa-codiepie"
                                                               color="warning"/>
                                                 </Col>
                                             </Row>
@@ -83,8 +120,12 @@ class ViewPlayer extends Component {
                                     </Row>
                                     <Row>
                                         <Col style={{textAlign: "right"}}>
-                                            <Button color="secondary">View Offers</Button>
-                                            <Button color="primary">Make Offer</Button>
+                                            <NavLink href="#/offers">
+                                                <Button color="secondary">View Offers</Button>
+                                            </NavLink>
+                                            <NavLink href="#/offers">
+                                                <Button color="secondary">Make Offer</Button>
+                                            </NavLink>
                                         </Col>
                                     </Row>
                                 </CardBody>
