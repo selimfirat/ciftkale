@@ -237,7 +237,7 @@ def getCoachInfo(username):
             return  {'result': 'failed'};
         
         cursor.execute("""SELECT p.first_name, p.last_name, s.date_of_birth, s.salary, co.club_name
-        FROM CurrentOccupation co, Coach c, Person p, Sportsman s 
+        FROM Currentoccupations co, Coach c, Person p, Sportsman s 
         WHERE c.coach_username = co.sportsman_username 
         AND p.username = co.sportsman_username 
         AND s.sportsman_username = p.username
@@ -261,13 +261,13 @@ def getCoachInfo(username):
 def getDirectorInfo(username):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Person p WHERE p.username = co.sportsman_username AND p.username = %s", [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM Currentoccupations co, Person p WHERE p.username = co.sportsman_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
         except DatabaseError:
             return  {'result': 'failed'};
 
-        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM CurrentOccupation co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s", [username])
+        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM Currentoccupations co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s", [username])
         row = cursor.fetchone()
         date_of_birth = row[0]
         salary = row[1]
