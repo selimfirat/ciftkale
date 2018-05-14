@@ -1,5 +1,6 @@
 from django.db import connection
 from django.db.utils import DatabaseError
+from faker import Faker # pip install Faker, used for fake name generation
 
 import csv
 import os
@@ -11,6 +12,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ciftkale.settings")
 
 league_start = "2017-09-01"
 league_end = "2018-06-01"
+uniqueRandomNum = random.sample(range(1000, 1000000), 10000)
+randomKitNumber = random.sample(range(1, 100), 99)
 
 
 """
@@ -23,8 +26,7 @@ def inserter():
 	with open('ciftkale/players.csv', 'r') as players:
 		with connection.cursor() as cursor:
 			player_reader = csv.reader(players, delimiter=',', quotechar='|')
-			uniqueRandomNum = random.sample(range(1000, 10000), 1000)
-			randomKitNumber = random.sample(range(1, 100), 99)
+
 
 			rowCount = 0
 			colCount = 0
@@ -97,9 +99,64 @@ def inserter():
 
 
 
-with connection.cursor() as cursor:
-	
+#initialize directors
 
+def director():
+
+	"""with connection.cursor() as cursor:
+		cursor.execute("SELECT COUNT(*) FROM player")
+		pNum = cursor.fetchone()
+		playerCount = pNum[0]
+		print('Player count: %s', playerCount)"""
+
+	fake = Faker()
+	for i in range(1): #number of teams = 164
+
+		name = fake.name()
+
+		first_name = name_tools.split(name)[1]
+		last_name = name_tools.split(name)[2]	
+		last_name_without_spaces = last_name.replace(" ", "")
+		first_name_without_spaces = first_name.replace(" ", "")
+		username = last_name_without_spaces + first_name_without_spaces
+		e_mail = username + "@agent.com"
+		hashed_password = "123456"
+		phone_number = str(uniqueRandomNum[i])
+		date_of_birth = "1997-06-19"
+		salary = 50000
+		clubs = []
+
+		
+		with connection.cursor() as cursor:
+
+			cursor.execute("SELECT * FROM player")
+			players = cursor.fetchall()
+
+		with connection.cursor() as cursor:
+
+			cursor.execute("SELECT agent_username FROM agent")
+			agents = cursor.fetchall()
+		
+
+		"""with connection.cursor() as cursor:
+			try:		
+
+				cursor.execute("INSERT INTO person (first_name, last_name, e_mail, username, hashed_password, phone_number) VALUES (%s, %s, %s, %s, %s, %s)", [first_name, last_name, e_mail, username, hashed_password, phone_number])				
+				#cursor.execute("INSERT INTO sportsman (sportsman_username, date_of_birth, salary) VALUES (%s, TIMESTAMP %s, %s)", [username, date_of_birth, salary])
+				cursor.execute("INSERT INTO agent (agent_username) VALUES (%s)", [username])
+
+			except DatabaseError:
+				print('fail')
+				#raise"""
+
+	with connection.cursor() as cursor:			
+		for i in range(998):
+			cursor.execute("UPDATE player SET agent_username = %s WHERE player_username = %s", [agents[i], players[i][0]])
+			print('success')
+
+
+
+director()
 
 #inserter()
 	
