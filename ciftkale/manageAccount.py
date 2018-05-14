@@ -64,7 +64,6 @@ def changeUsername(curUser, newUser, password):
         with connection.cursor() as cursor:
             try:
                 cursor.execute("UPDATE SET username = %s  WHERE username =%s", [newUser, curUser]);
-                row2 = cursor.fetchone();
 
             except DatabaseError:
                 return  {'result': 'failed', "error": "New username you entered exists! Please try a different username."};
