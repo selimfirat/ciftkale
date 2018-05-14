@@ -102,7 +102,6 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 rows[i] = rows[i][:-1]
                 
         except DatabaseError:
-            raise
             return  {'result': 'failed'};
 
     return {

@@ -31,7 +31,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://ciftkale.herokuapp.com/api/leagues', { params: params });
+    return axios.get('http://localhost:5000/api/leagues', { params: params });
 };
 
 let country = "";

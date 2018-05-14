@@ -107,7 +107,8 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
     let filterMap = {
         'country': 'filterCountry',
         'name': 'filterPlayer',
-        'team': 'filterTeam'
+        'team': 'filterTeam',
+        'overall': 'filterOverall'
     }
 
     for (let info of filterInfo) {
@@ -117,7 +118,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://ciftkale.herokuapp.com/api/players', { params: params });
+    return axios.get('http://localhost:5000/api/players', { params: params });
 };
 
 
