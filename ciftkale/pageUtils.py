@@ -240,7 +240,7 @@ def getCoachInfo(username):
         FROM CurrentOccupation co, Coach c, Person p, Sportsman s 
         WHERE c.coach_username = co.sportsman_username 
         AND p.username = co.sportsman_username 
-        AND s.spartsman_username = p.username
+        AND s.sportsman_username = p.username
         AND c.coach_username = %s"""
         , [username])
         row = cursor.fetchone()
