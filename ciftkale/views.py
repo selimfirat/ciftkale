@@ -187,6 +187,8 @@ def players_view(request):
   response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, sortQuery, pageSize, page)
   return JsonResponse(response)
 
+
+
 @csrf_exempt
 def player_view(request):
     username  = request.GET['username']
