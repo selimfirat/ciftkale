@@ -11,6 +11,7 @@ import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
 import { Link } from 'react-router-dom'
 import Widget02 from './Widgets/Widget02';
+import axios from 'axios';
 
 const qs = require('query-string');
 
@@ -53,7 +54,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         'sortInfo': JSON.stringify(sortInfo)
     };
 
-    filterMap = {
+    let filterMap = {
         'country': 'filterCountry',
         'league': 'filterLeague',
         'name': 'filterTeam',
@@ -274,11 +275,11 @@ class ListRealTeams extends Component {
                           defaultSorted={[
                               {
                                   id: "name",
-                                  asc: true
+                                  desc: true
                               },
                               {
                                   id: "standing",
-                                  asc: true
+                                  desc: true
                               }
                           ]}
                       />

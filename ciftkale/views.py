@@ -118,7 +118,7 @@ def league_view(request):
 
   response = getLeagueInfo(leagueName, leagueStart)
   return JsonResponse(response)
-  
+
 @csrf_exempt
 def clubs_view(request):
   page            = int(request.GET['page'])
@@ -150,5 +150,5 @@ def clubs_view(request):
       if info['id'] in sort_map:
         sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
 
-  response = getLeaguesTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, sortQuery, pageSize, page)
+  response = getClubsTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, sortQuery, pageSize, page)
   return JsonResponse(response)
