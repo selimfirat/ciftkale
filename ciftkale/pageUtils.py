@@ -208,11 +208,11 @@ def getClubsInfo(clubName):
         except DatabaseError:
             return  {'result': 'failed'};
         
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         director_name = row[0] + " " + row[1]
 
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         coach_name = row[0] + " " + row[1]
 
@@ -232,7 +232,7 @@ def getCoachInfo(username):
             cursor.execute("SELECT * FROM Coach WHERE coach_username = %s", [username])
             row = cursor.fetchone()
 
-            exp = rows[1]
+            exp = row[1]
         except DatabaseError:
             return  {'result': 'failed'};
         
@@ -261,13 +261,13 @@ def getCoachInfo(username):
 def getDirectorInfo(username):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Person p WHERE p.username = co.sportsman_username AND p.username = %s" [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Person p WHERE p.username = co.sportsman_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
         except DatabaseError:
             return  {'result': 'failed'};
 
-        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM CurrentOccupation co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s" [username])
+        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM CurrentOccupation co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s", [username])
         row = cursor.fetchone()
         date_of_birth = row[0]
         salary = row[1]
