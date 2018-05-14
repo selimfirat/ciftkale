@@ -128,7 +128,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://localhost:5000/api/players', { params: params });
+    return axios.get('http://ciftkale.herokuapp.com/api/players', { params: params });
 };
 
 
