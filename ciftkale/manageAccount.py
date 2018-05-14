@@ -54,7 +54,7 @@ def changePassword(username, currentPass, newPass):
             row2 = cursor.fetchone();
             return {'result': 'success'};
     else:
-        return {'result': 'failed'};
+        return {'result': 'failed', "error": "The current password you entered is wrong!" };
     
 def changeUsername(curUser, newUser, password):
     with connection.cursor() as cursor:
