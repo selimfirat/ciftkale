@@ -66,7 +66,7 @@ def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", fi
         'result': 'success'
     }
 
-def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filter_agent ="", sort_query = "", items_per_page = 15, page_num = 0):
+def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filter_agent ="", filter_overall = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT a.agent_username FROM Agent a, Person p WHERE a.agent_username = p.username AND (p.first_name || ' ' || p.last_name ILIKE %s OR p.last_name || ' ' || p.first_name ILIKE %s)", [filter_agent, filter_agent])
@@ -85,13 +85,14 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 AND p.nationality ILIKE %s 
                 AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
                 AND p.agent_username ILIKE %s
-                """ + sort_query + 
-                " LIMIT %s OFFSET %s" , 
+                AND p.overall_score::varchar ILIKE %s
+                """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
                 "%" + filter_name + "%",
                 "%" + filter_name + "%", 
                 "%" + agent_username + "%",
+                "%" + filter_overall + "%",
                 items_per_page, 
                 page_num * items_per_page]
             )
