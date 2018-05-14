@@ -67,11 +67,11 @@ def changeUsername(curUser, newUser, password):
                 row2 = cursor.fetchone();
 
             except DatabaseError:
-                return  {'result': 'failed'};
+                return  {'result': 'failed', "error": "New username you entered exists! Please try a different username."};
 
             return {'result': 'success'};
     else:
-        return {'result': 'failed'};
+        return {'result': 'failed', "error": "The current password you entered is wrong!" };
 
 
     
