@@ -196,7 +196,13 @@ def player_view(request):
 
 @csrf_exempt
 def coach_view(request):
-     username  = request.GET['username']
-
+    username  = request.GET['username']
     response = getCoachInfo(username)
+    return JsonResponse(response)
+
+@csrf_exempt
+def Director_view(request):
+    username  = request.GET['username']
+
+    response = getDirectorInfo(username)
     return JsonResponse(response)
