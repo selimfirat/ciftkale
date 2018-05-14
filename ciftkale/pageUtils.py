@@ -284,7 +284,7 @@ def getDirectorInfo(username):
 def getAgentInfo(username):
      with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a, Person p WHERE p.username = a.agent_username AND p.username = %s" [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a, Person p WHERE p.username = a.agent_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
 
