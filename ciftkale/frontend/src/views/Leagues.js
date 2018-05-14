@@ -60,7 +60,7 @@ const columns = [
                         value={ country }
                         style={{ width: '100%' }}
                     />)},
-                Cell: (row) => ( <Link to={"/list/real/leagues?country=" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/leagues?country=" + row.value}>{row.value}</Link>)
 
             },
             {
@@ -68,7 +68,7 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/teams?league=" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/teams?league=" + row.value}>{row.value}</Link>)
 
             },
             {

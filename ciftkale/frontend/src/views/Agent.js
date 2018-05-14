@@ -57,11 +57,11 @@ class ViewAgent extends Component {
                                                           icon="fa fa-mixcloud" color="secondary"/>
                                             </Col>
                                             <Col xs="12" sm="6" lg="3">
-                                                <Widget02 header={<Link to={"/list/real/players/" + coach.player}>{coach.player}</Link>} mainText="Player" icon="fa fa-codiepie"
+                                                <Widget02 header={<Link to={"/players/" + coach.player}>{coach.player}</Link>} mainText="Player" icon="fa fa-codiepie"
                                                           color="warning"/>
                                             </Col>
                                             <Col xs="12" sm="6" lg="3">
-                                                <Widget02 header={<Link to={"/list/real/players/" + coach.player}>{"Webner Şahıstan"}</Link>} mainText="Player" icon="fa fa-codiepie"
+                                                <Widget02 header={<Link to={"/players/" + coach.player}>{"Webner Şahıstan"}</Link>} mainText="Player" icon="fa fa-codiepie"
                                                           color="warning"/>
                                             </Col>
                                         </Row>

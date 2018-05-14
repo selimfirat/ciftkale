@@ -58,12 +58,14 @@ export default {
       {
           name: "All Transfer Offers",
           url: "/offers",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: true
       },
       {
           name: "Your Pending Offers",
           url: "/offers",
-          icon: 'icon-star'
+          icon: 'icon-star',
+          auth: true
       },
 
       {

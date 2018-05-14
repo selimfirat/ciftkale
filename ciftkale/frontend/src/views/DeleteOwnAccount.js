@@ -29,17 +29,17 @@ class DeleteOwnAccount extends Component {
 
 
         axios
-            .post("/api/deleteownaccount", { username: username, current_password: current_password })
+            .post("https://ciftkale.herokuapp.com/api/deleteownaccount", { username: username, current_password: current_password })
             .then(res => {
                 let d = res.data;
 
                 if (d.result === "success")
-                    this.props.history.push('/logout')
+                    this.props.history.push('/account/logout')
                 else
                     this.setState({ wrong_current_password: true });
             })
             .catch(err => {
-                this.props.history.push('/logout')
+
             })
         ;
     }

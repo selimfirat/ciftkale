@@ -62,14 +62,14 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/teams/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/teams/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: "from_director",
                 Header: "Director",
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/directors/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/directors/" + row.value}>{row.value}</Link>)
             }
         ]
     },
@@ -88,14 +88,14 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/teams/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/teams/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: 'to_agent',
                 Header: 'Agent',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/agents/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/agents/" + row.value}>{row.value}</Link>)
             },
         ]
     },
@@ -114,7 +114,7 @@ const columns = [
                             value={ team }
                             style={{ width: '100%' }}
                         />)},
-                Cell: (row) => ( <Link to={"/list/real/offers?player=" + row.value}>{row.value}</Link>),
+                Cell: (row) => ( <Link to={"/offers?player=" + row.value}>{row.value}</Link>),
                 filterAll: true,
             },
             {

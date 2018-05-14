@@ -75,7 +75,7 @@ const columns = [
                             style={{ width: '100%' }}
                         />)},
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/teams?country=" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/teams?country=" + row.value}>{row.value}</Link>)
 
             },
             {
@@ -92,7 +92,7 @@ const columns = [
                             style={{ width: '100%' }}
                         />)},
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/teams?league=" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/teams?league=" + row.value}>{row.value}</Link>)
             }
         ]
     },
@@ -118,21 +118,21 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => (<Link to={"/list/real/teams/" + row.value}>{row.value}</Link>)
+                Cell: (row) => (<Link to={"/teams/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: "coach",
                 Header: "Coach",
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/coaches/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/coaches/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: "director",
                 Header: "Director",
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/list/real/directors/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/directors/" + row.value}>{row.value}</Link>)
             },
             {
                 accessor: "budget",
