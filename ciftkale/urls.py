@@ -1,5 +1,4 @@
 """ciftkale URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.0/topics/http/urls/
 Examples:
@@ -30,10 +29,10 @@ urlpatterns = [
     path('api/leagues', views.leagues_view),
     path('api/league', views.league_view),
     path('api/clubs', views.clubs_view),
-    #path('api/director', views.director_view),
-    #path('api/agent', views.agent_view),
+    path('api/director', views.director_view),
+    path('api/agent', views.agent_view),
     path('api/players', views.players_view),
-    #path('api/player', views.player_view),
+    path('api/player', views.player_view),
     #path('api/offers', views.offers_view),
     #path('api/makeoffer', views.makeoffer_view),
     #path('api/acceptoffer', views.acceptoffer_view),
