@@ -187,3 +187,16 @@ def players_view(request):
   response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, sortQuery, pageSize, page)
   return JsonResponse(response)
 
+@csrf_exempt
+def player_view(request):
+    username  = request.GET['username']
+
+    response = getPlayerInfo(username)
+    return JsonResponse(response)
+
+@csrf_exempt
+def coach_view(request):
+     username  = request.GET['username']
+
+    response = getCoachInfo(username)
+    return JsonResponse(response)
