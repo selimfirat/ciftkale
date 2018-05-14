@@ -288,11 +288,14 @@ def getAgentInfo(username):
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
 
-            cursor.execute("SELECT * FROM Person p, Player pl, Agent a WHERE pl.player_username = p.username AND a.agent_username = %s AND a.agent_username = pl.agent_username", [username])
-            row = cursor.fetchall()
+            cursor.execute("SELECT p.first_name, p.last_name FROM Person p, Player pl, Agent a WHERE pl.player_username = p.username AND a.agent_username = %s AND a.agent_username = pl.agent_username", [username])
+            rows = cursor.fetchall()
+
+            for i in rows:
+                players[i] = rows[i][0] + " " + rows[i][1]
 
             return {'name': full_name,
-                    'players' : row,
+                    'players' : players,
                     'result' : 'success'}
 
         except DatabaseError:
