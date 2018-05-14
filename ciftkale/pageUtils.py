@@ -13,14 +13,13 @@ import name_tools #REQUIRES NAME_TOOLS TO BE DOWNLOADED
 def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT * FROM league NATURAL JOIN LeagueCountry WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
+            cursor.execute("SELECT *, count(*) OVER() as full_count FROM league NATURAL JOIN LeagueCountry WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
             "%" + filter_league + "%", items_per_page, page_num * items_per_page])
-            rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM league ")
-            count = int(cursor.fetchone()[0]);
+            rows = cursor.fetchall()
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
+
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -30,18 +29,34 @@ def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", it
         'result': 'success'
     }
 
-def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", items_per_page = 15, page_num = 0):
+def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", filter_standing = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
-        #HAKAN coach ve Director filtrelemerini halledecek...
         try:
-            cursor.execute("SELECT * FROM club WHERE country ILIKE %s AND league_name ILIKE %s AND filter_team ILIKE %s AND  " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
-            "%" + filter_league + "%", "%" + filter_team + "%", "%" + filter_coach + "%", "%" + filter_director + "%",items_per_page, page_num * items_per_page])
-            rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM club")
-            count = int(cursor.fetchone()[0]);
+            cursor.execute("""
+            SELECT c.*, ch.coach_username, d.director_username, count(*) OVER() as full_count 
+            FROM Club c, Coach ch, Director d, CurrentOccupations coch, CurrentOccupations cod 
+            WHERE coch.sportsman_username = ch.coach_username AND cod.sportsman_username = d.director_username 
+            AND coch.club_name = c.club_name AND cod.club_name = c.club_name
+            AND c.country ILIKE %s 
+            AND c.league_name ILIKE %s 
+            AND c.club_name ILIKE %s 
+            AND ch.coach_username ILIKE %s
+            AND d.director_username ILIKE %s
+            AND c.standing::varchar ILIKE %s
+            """ + sort_query + " LIMIT %s OFFSET %s" , 
+            ["%" + filter_country + "%", 
+            "%" + filter_league + "%", 
+            "%" + filter_team + "%", 
+            "%" + filter_coach + "%", 
+            "%" + filter_director + "%",
+            "%" + filter_standing + "%",
+            items_per_page, 
+            page_num * items_per_page])
+            rows = cursor.fetchall()
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
+
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -58,7 +73,7 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
             agent_username = cursor.fetchone()[0]
             cursor.execute(
                 """
-                SELECT * FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
+                SELECT *, count(*) OVER() as full_count FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
                 WHERE u.username = p.player_username 
                 AND p.player_username = co.sportsman_username 
                 AND c.club_name ILIKE %s 
@@ -76,11 +91,9 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 page_num * items_per_page]
             )
             rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM Player ")
-            count = int(cursor.fetchone()[0]);
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
         except DatabaseError:
             return  {'result': 'failed'};
 

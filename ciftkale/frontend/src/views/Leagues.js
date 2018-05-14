@@ -89,8 +89,8 @@ const columns = [
 let params = {};
 
 class ListRealLeagues extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             data: [],
             pages: null,

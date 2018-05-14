@@ -11,12 +11,14 @@ import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
 import { Link } from 'react-router-dom'
 import Widget02 from './Widgets/Widget02';
+import axios from 'axios';
 
 const qs = require('query-string');
 
 let league = "";
 let country = "";
 
+/*
 const data = [
     {
         logo: "arsenal.png",
@@ -43,6 +45,33 @@ const data = [
         standing: 1
     }
 ];
+*/
+
+const requestData = (page, pageSize, sortInfo, filterInfo) => {
+    let params = {
+        'page': page,
+        'pageSize': pageSize,
+        'sortInfo': JSON.stringify(sortInfo)
+    };
+
+    let filterMap = {
+        'country': 'filterCountry',
+        'league': 'filterLeague',
+        'name': 'filterTeam',
+        'coach': 'filterCoach',
+        'director': 'filterDirector',
+        'standing': 'filterStanding'
+    }
+
+    for (let info of filterInfo) {
+        let filterName = filterMap[info.id];
+        if (filterName) {
+            params[filterName] = info.value;
+        }
+    }
+
+    return axios.get('http://ciftkale.herokuapp.com/api/clubs', { params: params });
+};
 
 const columns = [
     {
@@ -67,7 +96,6 @@ const columns = [
                 width: 150,
                 filterable: true,
                 Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, country), 1)
                     return (
                         <input
                             onChange={event => { onChange(event.target.value); country = event.target.value} }
@@ -84,7 +112,6 @@ const columns = [
                 width: 200,
                 filterable: true,
                 Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, league), 1)
                     return (
                         <input
                             onChange={event => { onChange(event.target.value); league = event.target.value} }
@@ -153,6 +180,13 @@ class ListRealTeams extends Component {
 
         league = params.league ? params.league : "";
         country = params.country ? params.country : "";
+
+        this.state = {
+            data: [],
+            pages: null,
+            loading: true
+        };
+        this.fetchNewData = this.fetchNewData.bind(this);
     }
 
     componentDidUpdate() {
@@ -161,9 +195,38 @@ class ListRealTeams extends Component {
         league = params.league ? params.league : "";
         country = params.country ? params.country : "";
     }
+
+
+    fetchNewData(state, instance) {
+        this.setState({ loading: true });
+
+        requestData(
+            state.page,
+            state.pageSize,
+            state.sorted,
+            state.filtered
+        ).then(res => {
+            console.log(res);
+
+            let data = res.data.res.map(rows => ({
+                    name: rows[0],
+                    country: rows[3],
+                    total_budget: 1337, // TODO: fix this with backend m88
+                    total_teams: 1337,
+                    country_logo: "tr" // herkes Türk hocam
+                })
+            );
+
+            this.setState({
+                data: data,
+                pages: Math.ceil(res.data.num_rows / state.pageSize),
+                loading: false
+            });
+        });
+    }
     
       render() {
-
+          const {pages, data, loading} = this.state;
           return (
           <div className="animated fadeIn">
               { params.league &&
@@ -199,19 +262,24 @@ class ListRealTeams extends Component {
                   </CardHeader>
                   <CardBody>
                       <ReactTable
-                          data={data}
                           columns={columns}
                           defaultPageSize={10}
-                          defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]}) }
+                          data={data}
+                          manual
+                          filterable
+                          pages={pages}
+                          loading={loading}
+                          onFetchData={this.fetchNewData}
+                          //defaultFilterMethod={(filter, rows) => matchSorter(rows, filter.value, {keys: [filter.id]}) }
                           className="-striped -highlight"
                           defaultSorted={[
                               {
                                   id: "name",
-                                  asc: true
+                                  desc: true
                               },
                               {
                                   id: "standing",
-                                  asc: true
+                                  desc: true
                               }
                           ]}
                       />
