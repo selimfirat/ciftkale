@@ -50,7 +50,7 @@ def changePassword(username, currentPass, newPass):
         row = cursor.fetchone()
     if (row is not None ):
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE SET hashed_password = %s  WHERE username =%s", [newPass, username]);
+            cursor.execute("UPDATE person SET hashed_password = %s WHERE username =%s", [newPass, username]);
             row2 = cursor.fetchone();
             return {'result': 'success'};
     else:
