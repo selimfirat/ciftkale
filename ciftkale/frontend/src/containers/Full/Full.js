@@ -34,6 +34,7 @@ import NoAuthorization from "../../views/NoAuthorization";
 import MakeOffer from "../../views/MakeOffer";
 import MakeOfferTeam from "../../views/MakeOfferTeam";
 import OffersToAccept from "../../views/OffersToAccept";
+import Logout from "../../views/Logout";
 
 class Full extends Component {
   render() {
@@ -69,6 +70,7 @@ class Full extends Component {
                 <Route path="/account/changeusername" component={ChangeUsername}/>
                 <Route path="/account/changepassword" component={ChangePassword}/>
                 <Route path="/account/deleteownaccount" component={DeleteOwnAccount}/>
+                <Route path="/account/logout" component={Logout}/>
                 <Redirect from="/" to="/leagues"/>
               </Switch>
             </Container>

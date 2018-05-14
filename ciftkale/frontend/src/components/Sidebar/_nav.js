@@ -8,7 +8,8 @@ export default {
               element: '',        // required valid HTML5 element tag
               attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
           },
-          class: ''             // optional class names space delimited list for title item ex: "text-center"
+          class: '',             // optional class names space delimited list for title item ex: "text-center"
+          auth: false
       },
       {
           name: "Login",
@@ -29,39 +30,6 @@ export default {
           auth: false
       },
 
-      {
-          title: true,
-          name: 'Account',
-          wrapper: {            // optional wrapper object
-              element: '',        // required valid HTML5 element tag
-              attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
-          },
-          class: '',
-          auth: true             // optional class names space delimited list for title item ex: "text-center"
-      },
-      {
-          name: "Change Password",
-          url: "/account/changepassword",
-          icon: 'icon-star',
-          auth: true
-      },
-      {
-          name: "Delete Own Account",
-          url: "/account/deleteownaccount",
-          icon: 'icon-star',
-          auth: true
-      },
-      {
-          name: "Change Photo",
-          url: "/account/changephoto",
-          icon: 'icon-star',
-          auth: true
-      },
-      {
-          name: "Change Username",
-          url: "/account/changeusername",
-          icon: 'icon-star'
-      },
 
       {
           title: true,
@@ -96,6 +64,47 @@ export default {
           name: "Your Pending Offers",
           url: "/offers",
           icon: 'icon-star'
+      },
+
+      {
+          title: true,
+          name: 'Account',
+          wrapper: {            // optional wrapper object
+              element: '',        // required valid HTML5 element tag
+              attributes: {}        // optional valid JS object with JS API naming ex: { className: "my-class", style: { fontFamily: "Verdana" }, id: "my-id"}
+          },
+          class: '',
+          auth: true             // optional class names space delimited list for title item ex: "text-center"
+      },
+      {
+          name: "Change Password",
+          url: "/account/changepassword",
+          icon: 'icon-star',
+          auth: true
+      },
+      {
+          name: "Delete Own Account",
+          url: "/account/deleteownaccount",
+          icon: 'icon-star',
+          auth: true
+      },
+      {
+          name: "Change Photo",
+          url: "/account/changephoto",
+          icon: 'icon-star',
+          auth: true
+      },
+      {
+          name: "Change Username",
+          url: "/account/changeusername",
+          icon: 'icon-star',
+          auth: true
+      },
+      {
+          name: "Logout",
+          url: "/account/logout",
+          icon: 'icon-star',
+          auth: true
       }
   ]
 };

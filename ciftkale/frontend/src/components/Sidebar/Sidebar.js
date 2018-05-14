@@ -136,7 +136,12 @@ class Sidebar extends Component {
 
     // nav list
     const navList = (items) => {
-      return items.map( (item, index) => navType(item, index) );
+      return items.map( (item, index) => {
+        if (item.auth === undefined || ((item.auth && localStorage["username"]) || (!item.auth && !localStorage["username"])))
+            return navType(item, index);
+        else
+          return;
+      } );
     };
 
     const isExternal = (url) => {
