@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/leagues', views.leagues_view),
     path('api/league', views.league_view),
     path('api/clubs', views.clubs_view),
+    path('api/club', views.club_view),
     path('api/director', views.director_view),
     path('api/coach', views.coach_view),
     path('api/agent', views.agent_view),
