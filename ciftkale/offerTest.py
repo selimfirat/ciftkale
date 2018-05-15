@@ -10,7 +10,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ciftkale.settings")
 uniqueRandomNum = random.sample(range(1000, 10000), 1000)
 
 
-
 def createOffer(price, director_sender, director_receiver, status = 'pending', offer_id = None):
     if offer_id is None:
         offer_id = 'DEFAULT'
@@ -50,7 +49,18 @@ def getOffersOfDirector(username):
     with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT * FROM offer WHERE director_sender = %s", [username])
-            sentOffers = cursor.fetchall()
+            sentOffers = list(list(x) for x in cursor.fetchall())
+            for i in range(len(sentOffers)):
+                offer_id = sentOffers[i][0]
+                
+                players = []
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
+                for p in cursor.fetchall():
+                    players.append(p[0] + ' ' + p[1])
+                
+                sentOffers[i].append(players)
+                print("wtf")
+                print(players)
         except DatabaseError:
             #raise
             return { 'result': 'failed' }
@@ -58,7 +68,17 @@ def getOffersOfDirector(username):
     with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT * FROM offer WHERE director_receiver = %s", [username])
-            receivedOffers = cursor.fetchall()
+            receivedOffers = list(list(x) for x in cursor.fetchall())
+            for i in range(len(receivedOffers)):
+                offer_id = receivedOffers[i][0]
+                
+                players = []
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
+                for p in cursor.fetchall():
+                    players.append(p[0] + ' ' + p[1])
+                print(players)
+                receivedOffers[i].append(players)
+            
         except DatabaseError:
             #raise
             return { 'result': 'failed' }
