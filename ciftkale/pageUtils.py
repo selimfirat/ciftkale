@@ -313,40 +313,26 @@ def getAgentInfo(username):
         except DatabaseError:
             return  {'result': 'failed'};
 
+
 def getHomePageInfo():
     with connection.cursor() as cursor:
         try:
-            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.overall_score) FROM Person p, Player pl 
-            WHERE p.username = pl.player_username 
-            GROUP BY p.first_name, p.last_name, pl.overall_score 
-            ORDER BY pl.overall_score DESC LIMIT 10""")
+            cursor.execute("""SELECT c.league_name AVG(pl.overall_score) as acc 
+            FROM currentOccupations oc, Player pl, Club c
+            WHERE  oc.sportsman_username = pl.player_username AND c.club_name = oc.club_name
+            GROUP BY c.league_name
+            ORDER BY acc DESC LIMIT 10""")
             rows = cursor.fetchall()
 
-            scorers = []
-            scores = []
-
-            for i in range(len(rows)):
-                scorers.append(rows[i][0] + " " + rows[i][1])
-                scores.append(rows[i][2])
-
-            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.shot_accuracy) FROM Person p, Player pl 
-            WHERE p.username = pl.player_username 
-            GROUP BY p.first_name, p.last_name, pl.shot_accuracy 
-            ORDER BY pl.shot_accuracy DESC LIMIT 10""")
+            cursor.execute("""SELECT pl.dominant_foot AVG(pl.shot_accuracy) as acc 
+            FROM Player pl
+            GROUP BY pl.dominant_foot
+            ORDER BY acc""")
             rows2 = cursor.fetchall()
-
-            shooters =[]
-            acc = []
-
-            for i in range(len(rows2)):
-                shooters.append(rows2[i][0] + " " + rows2[i][1])
-                acc.append(rows2[i][2])
             
             return {
-                'scorer_names' : scorers,
-                'scores': scores,
-                'shooter_names' : shooters,
-                'accuracies' :  acc,
+                'league_overalls': rows,
+                'accuracies_for_foot': rows2, 
                 'result': 'success'
             }
 
