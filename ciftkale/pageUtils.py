@@ -208,9 +208,10 @@ def getClubInfo(clubName):
         except DatabaseError:
             return  {'result': 'failed'};
         
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name, p.username FROM CurrentOccupations co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         director_name = row[0] + " " + row[1]
+        director_username = row[2]
 
         cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
@@ -224,6 +225,7 @@ def getClubInfo(clubName):
                 'country': country,
                 'director_name' : director_name,
                 'coach_name' : coach_name,
+                'director_username': director_username,
                 'result': 'success'}
 
 def getCoachInfo(username):

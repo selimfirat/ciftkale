@@ -29,7 +29,7 @@ class MakeOffer extends Component {
                 axios.get('http://ciftkale.herokuapp.com/api/club',{params: {
                     'club_name': res.data.team
                 }}).then(res => {
-                    this.director_name = res.data.director_name
+                    this.director_name = res.data.director_username;
                 });
             });
         axios.get('http://ciftkale.herokuapp.com/api/director', {params: {username: director}})
