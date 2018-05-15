@@ -237,13 +237,12 @@ def offers_view(request):
 @csrf_exempt
 def makeoffer_view(request):
   r = json.loads(request.body)
-  date = r.get('date', 'NULL')
   price = r['price']
   sender = r['sender']
   receiver = r['receiver']
   players = r.get('players', [])
 
-  offer_id = createOffer(date, price, sender, receiver)['offer_id']
+  offer_id = createOffer(price, sender, reciever)['offer_id']
 
   for p in players:
     createBucket(offer_id, p)
