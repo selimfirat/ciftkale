@@ -11,13 +11,13 @@ uniqueRandomNum = random.sample(range(1000, 10000), 1000)
 
 
 
-def createOffer(date, price, director_sender, director_receiver, status = 'pending', offer_id = None):
+def createOffer(price, director_sender, director_receiver, status = 'pending', offer_id = None):
     if offer_id is None:
         offer_id = 'DEFAULT'
 
     with connection.cursor() as cursor:
         try:
-            cursor.execute("INSERT INTO offer (offer_id, date, price, status, director_sender, director_receiver) VALUES ("+ offer_id +", %s, %s, %s, %s, %s)", [date, price, status, director_sender, director_receiver])
+            cursor.execute("INSERT INTO offer (offer_id, date, price, status, director_sender, director_receiver) VALUES ("+ offer_id +", DEFAULT, %s, %s, %s, %s)", [price, status, director_sender, director_receiver])
         except DatabaseError:
             raise
             return { 'result': 'failed' }
@@ -91,6 +91,4 @@ def respondToOffer(offer_id, respond = 'canceled'):
 #print(respondToOffer(5, 'accepted'))
 #print(getOffersOfDirector('Boyd'))
 #print(createOffer('2017-05-14', '100000', 'Bond', 'Boyd'))
-#print(createBucket('1234', 'Abraham160741' ))
-
-    
+#print(createBucket('1234', 'Abraham160741' )
