@@ -15,6 +15,7 @@ class MakeOffer extends Component {
         let director = localStorage['username'];
 
         this.club_name = null;
+        this.director_name = null;
 
         this.state = {
             playername: "",
@@ -23,7 +24,13 @@ class MakeOffer extends Component {
 
         axios.get('http://ciftkale.herokuapp.com/api/player', {params: {username: this.player}})
             .then(res => {
-                this.setState({playername: res.name});
+                this.setState({playername: res.data.name});
+                
+                axios.get('http://ciftkale.herokuapp.com/api/club',{params: {
+                    'club_name': res.data.team
+                }}).then(res => {
+                    this.director_name = res.data.director_name
+                });
             });
         axios.get('http://ciftkale.herokuapp.com/api/director', {params: {username: director}})
             .then(res => {
@@ -38,12 +45,24 @@ class MakeOffer extends Component {
                     .then(res => {
                         this.setState({myplayers: res.data.res})
                     });
+                    
             });
+
+            this.submitOffer = this.submitOffer.bind(this);
     }
 
     submitOffer() {
         const selected = document.querySelectorAll('#multiple-select option:checked');
-        const values2 = Array.from(selected).map((el) => el.value);
+        const unames = Array.from(selected).map((el) => el.value);
+
+        const price = 0+document.querySelector('#price').value;
+
+        axios.post('http://ciftkale.herokuapp.com/api/makeoffer', {
+            price: price,
+            players: unames,
+            sender: localStorage['username'],
+            receiver: this.director_name
+        });
     }
 
     render() {        
@@ -63,7 +82,7 @@ class MakeOffer extends Component {
                                                 <i className="fa fa-money"></i>
                                             </InputGroupText>
                                         </InputGroupAddon>
-                                        <Input type="text" placeholder="($) Money Amount"/>
+                                        <Input type="text" placeholder="($) Money Amount" id="price"/>
                                     </InputGroup>
 
                                     <FormGroup row>
