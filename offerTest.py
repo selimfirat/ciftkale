@@ -17,7 +17,7 @@ def createOffer(price, director_sender, director_receiver, status = 'pending', o
 
     with connection.cursor() as cursor:
         try:
-            cursor.execute("INSERT INTO offer (offer_id, date, price, status, director_sender, director_receiver) VALUES ("+ offer_id +", DEFAULT, %s, %s, %s, %s)", [price, status, director_sender, director_receiver])
+            cursor.execute("INSERT INTO offer (offer_id, date, price, status, director_sender, director_receiver) VALUES ("+ offer_id +", now(), %s, %s, %s, %s)", [price, status, director_sender, director_receiver])
         except DatabaseError:
             raise
             return { 'result': 'failed' }
@@ -91,6 +91,4 @@ def respondToOffer(offer_id, respond = 'canceled'):
 #print(respondToOffer(5, 'accepted'))
 #print(getOffersOfDirector('Boyd'))
 #print(createOffer('2017-05-14', '100000', 'Bond', 'Boyd'))
-#print(createBucket('1234', 'Abraham160741' ))
-
-    
+#print(createBucket('1234', 'Abraham160741' )
