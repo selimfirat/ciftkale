@@ -38,5 +38,6 @@ urlpatterns = [
     path('api/player', views.player_view),
     path('api/offers', views.offers_view),
     path('api/makeoffer', views.makeoffer_view),
+     path('api/home', views.home_view),
     path('api/respondtooffer', views.respondtooffer_view),
 ]

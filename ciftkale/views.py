@@ -246,6 +246,11 @@ def makeoffer_view(request):
 def respondtooffer_view(request):
   offer_id = request.GET['o_id']
   respond = request.GET['respond']
-  
+
   res = respondToOffer(offer_id, respond)
+  return JsonResponse(res)
+
+@csrf_exempt
+def home_view():
+  res = getHomeInfo(offer_id, respond)
   return JsonResponse(res)

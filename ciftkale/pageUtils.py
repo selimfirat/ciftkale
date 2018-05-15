@@ -302,3 +302,39 @@ def getAgentInfo(username):
 
         except DatabaseError:
             return  {'result': 'failed'};
+
+def getHomePageInfo():
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.overall_score) FROM Person p, Player pl 
+            WHERE p.username = pl.player_username 
+            GROUP BY p.first_name, p.last_name, pl.overall_score 
+            ORDER BY pl.overall_score DESC LIMIT 10""")
+            rows = cursor.fetchall()
+
+            scorers = []
+
+            for i in range(len(rows)):
+                scorers.append(rows[i][0] + " " + rows[i][1])
+
+            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.shot_accuracy) FROM Person p, Player pl 
+            WHERE p.username = pl.player_username 
+            GROUP BY p.first_name, p.last_name, pl.shot_accuracy 
+            ORDER BY pl.shot_accuracy DESC LIMIT 10""")
+            rows2 = cursor.fetchall()
+
+            shooters =[]
+
+            for i in range(len(rows2)):
+                shooters.append(rows2[i][0] + " " + rows2[i][1])
+            
+            return {
+                'scorer_names' : scorers,
+                'scores': rows[:][3],
+                'shooter_names' : shooters,
+                'accuracies' :  rows2[:][3],
+                'result': 'success'
+            }
+
+        except DatabaseError:
+            return  {'result': 'failed'};
