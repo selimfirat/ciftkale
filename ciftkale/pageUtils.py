@@ -313,9 +313,11 @@ def getHomePageInfo():
             rows = cursor.fetchall()
 
             scorers = []
+            scores = []
 
             for i in range(len(rows)):
                 scorers.append(rows[i][0] + " " + rows[i][1])
+                scores.append(rows[i][2])
 
             cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.shot_accuracy) FROM Person p, Player pl 
             WHERE p.username = pl.player_username 
@@ -324,15 +326,17 @@ def getHomePageInfo():
             rows2 = cursor.fetchall()
 
             shooters =[]
+            acc = []
 
             for i in range(len(rows2)):
                 shooters.append(rows2[i][0] + " " + rows2[i][1])
+                acc.append(rows2[i][2])
             
             return {
                 'scorer_names' : scorers,
-                'scores': rows[:][2],
+                'scores': scores,
                 'shooter_names' : shooters,
-                'accuracies' :  rows2[:][2],
+                'accuracies' :  acc,
                 'result': 'success'
             }
 
