@@ -242,7 +242,7 @@ def makeoffer_view(request):
   receiver = r['receiver']
   players = r.get('players', [])
 
-  offer_id = createOffer(price, sender, reciever)['offer_id']
+  offer_id = createOffer(price, sender, receiver)['offer_id']
 
   for p in players:
     createBucket(offer_id, p)
