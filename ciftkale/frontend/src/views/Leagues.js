@@ -112,12 +112,13 @@ class ListRealLeagues extends Component {
         ).then(res => {
             console.log(res);
 
+            let flags = ["tr", "ec", "es", "it", "et", "fi", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc"];
             let data = res.data.res.map(rows => ({
                     name: rows[0],
                     country: rows[3],
-                    total_budget: rows[1], // TODO: fix this with backend m88
-                    total_teams: rows[2],
-                    country_logo: "tr" // herkes Türk hocam
+                    total_budget: rows[2], // TODO: fix this with backend m88
+                    total_teams: rows[1],
+                    country_logo: flags[Math.floor(Math.random()*flags.length)] // herkes Türk hocam
                 })
             );
 
