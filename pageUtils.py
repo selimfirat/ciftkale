@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.u
 
 import dj_database_url
 import django_heroku
@@ -14,35 +13,13 @@ import name_tools #REQUIRES NAME_TOOLS TO BE DOWNLOADED
 def getLeaguesTable(filter_country = "", filter_league = "", sort_query = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT * FROM league NATURAL JOIN LeagueCountry WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
+            cursor.execute("SELECT *, count(*) OVER() as full_count FROM league NATURAL JOIN LeagueCountry WHERE league_country ILIKE %s AND league_name ILIKE %s " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
             "%" + filter_league + "%", items_per_page, page_num * items_per_page])
-            rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM league ")
-            count = int(cursor.fetchone());
-        except DatabaseError:
-            return  {'result': 'failed'};
+            rows = cursor.fetchall()
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
 
-    return {
-        'res': rows,
-        'num_rows' : count,
-        'result': 'success'
-    }
-
-def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", items_per_page = 15, page_num = 0):
-    with connection.cursor() as cursor:
-        #HAKAN coach ve Director filtrelemerini halledecek...
-        try:
-            cursor.execute("SELECT * FROM club WHERE country ILIKE %s AND league_name ILIKE %s AND filter_team ILIKE %s AND  " + sort_query + " LIMIT %s OFFSET %s" , ["%" + filter_country + "%", 
-            "%" + filter_league + "%", "%" + filter_team + "%", "%" + filter_coach + "%", "%" + filter_director + "%",items_per_page, page_num * items_per_page])
-            rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM club")
-            count = int(cursor.fetchone());
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -52,36 +29,78 @@ def getClubsTable(filter_country ="" , filter_league = "", filter_team = "", fil
         'result': 'success'
     }
 
-def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filter_agent ="", sort_query = "", items_per_page = 15, page_num = 0):
+def getClubsTable(filter_country = "" , filter_league = "", filter_team = "", filter_coach = "", filter_director = "", sort_query = "", filter_standing = "", items_per_page = 15, page_num = 0):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT a.agent_username FROM Agent a, Person p a.agent_username = p.username AND ( p.first_name ILIKE %s OR p.last_name ILIKE %s)", [filter_agent, filter_agent])
-            agent_username = cursor.fetchone()[0]
+            cursor.execute("""
+            SELECT c.standing, c.country, c.league_name, c.club_name, ch.coach_username, d.director_username, 1337, c.short_name, count(*) OVER() as full_count 
+            FROM Club c, Coach ch, Director d, CurrentOccupations coch, CurrentOccupations cod 
+            WHERE coch.sportsman_username = ch.coach_username AND cod.sportsman_username = d.director_username 
+            AND coch.club_name = c.club_name AND cod.club_name = c.club_name
+            AND c.country ILIKE %s 
+            AND c.league_name ILIKE %s 
+            AND c.club_name ILIKE %s 
+            AND ch.coach_username ILIKE %s
+            AND d.director_username ILIKE %s
+            AND c.standing::varchar ILIKE %s
+            """ + sort_query + " LIMIT %s OFFSET %s" , 
+            ["%" + filter_country + "%", 
+            "%" + filter_league + "%", 
+            "%" + filter_team + "%", 
+            "%" + filter_coach + "%", 
+            "%" + filter_director + "%",
+            "%" + filter_standing + "%",
+            items_per_page, 
+            page_num * items_per_page])
+            rows = cursor.fetchall()
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
+
+        except DatabaseError:
+            return  {'result': 'failed'};
+
+    return {
+        'res': rows,
+        'num_rows' : count,
+        'result': 'success'
+    }
+
+def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filter_agent ="", filter_overall = "", sort_query = "", items_per_page = 15, page_num = 0):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("SELECT a.agent_username FROM Agent a, Person p WHERE a.agent_username = p.username AND (p.first_name || ' ' || p.last_name ILIKE %s OR p.last_name || ' ' || p.first_name ILIKE %s)", [filter_agent, filter_agent])
+            agent_username = cursor.fetchone()
+            if not agent_username:
+                agent_username = ''
+
             cursor.execute(
                 """
-                SELECT * FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
+                SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score,
+                count(*) OVER() as full_count 
+                FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
                 WHERE u.username = p.player_username 
                 AND p.player_username = co.sportsman_username 
                 AND c.club_name ILIKE %s 
                 AND p.nationality ILIKE %s 
-                AND (u.first_name + ' ' + u.last_name ILIKE %s OR u.last_name + ' ' + u.first_name ILIKE %s) ,
-                AND p.agent_username = %s
-                """ + sort_query + 
-                " LIMIT %s OFFSET %s" , 
+                AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
+                AND p.agent_username ILIKE %s
+                AND p.overall_score::varchar ILIKE %s
+                """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
                 "%" + filter_name + "%",
                 "%" + filter_name + "%", 
                 "%" + agent_username + "%",
+                "%" + filter_overall + "%",
                 items_per_page, 
                 page_num * items_per_page]
             )
             rows = cursor.fetchall();
-        except DatabaseError:
-            return  {'result': 'failed'};
-        try:
-            cursor.execute("SELECT COUNT(*) FROM Player ")
-            count = int(cursor.fetchone());
+            count = 0 if len(rows) == 0 else rows[0][-1]
+            for i in range(len(rows)):
+                rows[i] = rows[i][:-1]
+                
         except DatabaseError:
             return  {'result': 'failed'};
 
@@ -150,7 +169,7 @@ def getPlayerInfo(username):
             'assist' : assist,
             'shot' : shot,
             'yellow_card' : yellow_card,
-            'red_card' : red_card
+            'red_card' : red_card,
             'result' : 'success'
         }
 
@@ -174,7 +193,7 @@ def getLeagueInfo(leagueName, leagueStart):
                     'sponsor' : row[0], 
                     'result': 'success'}
 
-def getClubsInfo(clubName):
+def getClubInfo(clubName):
      with connection.cursor() as cursor:
         try:
             cursor.execute("SELECT * FROM Club WHERE club_name = %s ", [clubName])
@@ -189,11 +208,11 @@ def getClubsInfo(clubName):
         except DatabaseError:
             return  {'result': 'failed'};
         
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         director_name = row[0] + " " + row[1]
 
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s" [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         coach_name = row[0] + " " + row[1]
 
@@ -213,15 +232,15 @@ def getCoachInfo(username):
             cursor.execute("SELECT * FROM Coach WHERE coach_username = %s", [username])
             row = cursor.fetchone()
 
-            exp = rows[1]
+            exp = row[1]
         except DatabaseError:
             return  {'result': 'failed'};
         
         cursor.execute("""SELECT p.first_name, p.last_name, s.date_of_birth, s.salary, co.club_name
-        FROM CurrentOccupation co, Coach c, Person p, Sportsman s 
+        FROM Currentoccupations co, Coach c, Person p, Sportsman s 
         WHERE c.coach_username = co.sportsman_username 
         AND p.username = co.sportsman_username 
-        AND s.spartsman_username = p.username
+        AND s.sportsman_username = p.username
         AND c.coach_username = %s"""
         , [username])
         row = cursor.fetchone()
@@ -242,13 +261,13 @@ def getCoachInfo(username):
 def getDirectorInfo(username):
     with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupation co, Person p WHERE p.username = co.sportsman_username AND p.username = %s" [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM Currentoccupations co, Person p WHERE p.username = co.sportsman_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
         except DatabaseError:
             return  {'result': 'failed'};
 
-        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM CurrentOccupation co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s" [username])
+        cursor.execute("SELECT s.date_of_birth, s.salary, co.club_name FROM Currentoccupations co, Sportsman s WHERE s.sportsman_username = co.sportsman_username AND s.sportsman_username = %s", [username])
         row = cursor.fetchone()
         date_of_birth = row[0]
         salary = row[1]
@@ -258,16 +277,64 @@ def getDirectorInfo(username):
             'full_name' : full_name,
             'date_of_birth' : date_of_birth,
             'salary' : salary,
-            'club_name' : club_name
+            'club_name' : club_name,
             'result' : 'success'
         }
 
 def getAgentInfo(username):
      with connection.cursor() as cursor:
         try:
-            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a Person p WHERE p.username = a.agent_username AND p.username = %s" [username])
+            cursor.execute("SELECT p.first_name, p.last_name FROM Agent a, Person p WHERE p.username = a.agent_username AND p.username = %s", [username])
             row = cursor.fetchone()
             full_name = row[0] + " " + row[1]
+
+            cursor.execute("SELECT p.first_name, p.last_name FROM Person p, Player pl, Agent a WHERE pl.player_username = p.username AND a.agent_username = %s AND a.agent_username = pl.agent_username", [username])
+            rows = cursor.fetchall()
+
+            players = []
+
+            for i in range(len(rows)):
+                players.append(rows[i][0] + " " + rows[i][1])
+
+            return {'name': full_name,
+                    'players' : players,
+                    'result' : 'success'}
+
+        except DatabaseError:
+            return  {'result': 'failed'};
+
+def getHomePageInfo():
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.overall_score) FROM Person p, Player pl 
+            WHERE p.username = pl.player_username 
+            GROUP BY p.first_name, p.last_name, pl.overall_score 
+            ORDER BY pl.overall_score DESC LIMIT 10""")
+            rows = cursor.fetchall()
+
+            scorers = []
+
+            for i in range(len(rows)):
+                scorers.append(rows[i][0] + " " + rows[i][1])
+
+            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.shot_accuracy) FROM Person p, Player pl 
+            WHERE p.username = pl.player_username 
+            GROUP BY p.first_name, p.last_name, pl.shot_accuracy 
+            ORDER BY pl.shot_accuracy DESC LIMIT 10""")
+            rows2 = cursor.fetchall()
+
+            shooters =[]
+
+            for i in range(len(rows2)):
+                shooters.append(rows2[i][0] + " " + rows2[i][1])
+            
+            return {
+                'scorer_names' : scorers,
+                'scores': rows[:][3],
+                'shooter_names' : shooters,
+                'accuracies' :  rows2[:][3],
+                'result': 'success'
+            }
 
         except DatabaseError:
             return  {'result': 'failed'};
