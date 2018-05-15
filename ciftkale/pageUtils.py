@@ -303,7 +303,7 @@ def getAgentInfo(username):
         except DatabaseError:
             return  {'result': 'failed'};
 
-def getHomePageInfo():
+def getHomePageInfo(self):
     with connection.cursor() as cursor:
         try:
             cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.overall_score) FROM Person p, Player pl 
