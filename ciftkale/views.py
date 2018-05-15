@@ -252,5 +252,5 @@ def respondtooffer_view(request):
 
 @csrf_exempt
 def home_view(request):
-  res = getHomePageInfo(self)
+  res = getHomePageInfo()
   return JsonResponse(res)
