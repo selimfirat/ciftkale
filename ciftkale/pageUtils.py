@@ -92,7 +92,7 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 AND p.nationality ILIKE %s 
                 AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
                 AND p.agent_username ILIKE %s
-                AND p.overall_score BETWEEN %d AND %d
+                AND p.overall_score BETWEEN %s AND %s
                 """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
