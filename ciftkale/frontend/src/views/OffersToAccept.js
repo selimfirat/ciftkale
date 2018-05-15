@@ -36,6 +36,7 @@ class OffersToAccept extends Component {
         });
     }
 
+
     constructor(props) {
         super(props);
 
@@ -70,18 +71,47 @@ class OffersToAccept extends Component {
                                 <CardBody>
                                     <dl className="row">
                                         <dt className="col-sm-4">Offer From</dt>
-                                        <dd className="col-sm-8">{offer.offerer}</dd>
+                                        <dd className="col-sm-8">{offer[4]}</dd>
                                         <dt className="col-sm-4">Offered Money</dt>
-                                        <dd className="col-sm-8">{offer.offered_money}</dd>
+                                        <dd className="col-sm-8">${offer[2]}</dd>
+                                        <dt className="col-sm-4">State</dt>
+                                        <dd className="col-sm-8">{offer[3]}</dd>
                                         <dt className="col-sm-4">Offered Player(s)</dt>
-                                        <dd className="col-sm-8">{offer.offered_players.map(e =>  (<p>{e}</p>)) }</dd>
+                                        <dd className="col-sm-8">{/* offer[6].map(e =>  (<p>{e}</p>)) */}</dd>
                                         <dt className="col-sm-4">Your player(s) in Return</dt>
-                                        <dd className="col-sm-8">{offer.players_in_return.map(e => <p> {e} </p>) }</dd>
+                                        <dd className="col-sm-8">{/*offer.players_in_return.map(e => <p> {e} </p>) */}</dd>
                                     </dl>
                                 </CardBody>
                                 <CardFooter>
-                                    <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> Accept</Button>
-                                    <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Decline</Button>
+                                    { offer[3] === "pending" &&
+                                    (<p><Button type="reset" size="sm" onClick={e => {
+                                         //   e.preventDefault();
+                                            axios.get("https://ciftkale.herokuapp.com/api/respondtooffer", {
+                                                params: {
+                                                    o_id: offer[0],
+                                                    respond: "accepted"
+                                                }
+                                            }).then((response) => {
+                                                console.log(response);
+                                                window.location.reload();
+                                            });
+
+                                        }} color="success"><i className="fa fa-dot-circle-o"></i> Accept</Button>
+                                        <Button type="reset" size="sm" onClick={e => {
+                                          //  e.preventDefault();
+                                            axios.get("https://ciftkale.herokuapp.com/api/respondtooffer", {
+                                                params: {
+                                                    o_id: offer[0],
+                                                    respond: "cancelled"
+                                                }
+                                            }).then((response) => {
+                                                console.log(response);
+                                                window.location.reload();
+                                            });
+
+                                        }} color="danger"><i className="fa fa-ban"></i> Decline</Button></p>)
+
+                                    }
                                 </CardFooter>
                             </Card>
                         </Col> )
