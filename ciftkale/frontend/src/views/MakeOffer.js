@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText, FormGroup, Label } from 'reactstrap';
+import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText, FormGroup, Label, Alert } from 'reactstrap';
 import axios from 'axios';
 
 const qs = require('query-string');
@@ -19,7 +19,8 @@ class MakeOffer extends Component {
 
         this.state = {
             playername: "",
-            myplayers: []
+            myplayers: [],
+            success: false
         }
 
         axios.get('http://ciftkale.herokuapp.com/api/player', {params: {username: this.player}})
@@ -56,12 +57,15 @@ class MakeOffer extends Component {
         const unames = Array.from(selected).map((el) => el.value);
 
         const price = 0+document.querySelector('#price').value;
+        let self = this;
 
         axios.post('http://ciftkale.herokuapp.com/api/makeoffer', {
             price: price,
             players: unames,
             sender: localStorage['username'],
             receiver: this.director_name
+        }).then(function () {
+            self.setState({ success: true });
         });
     }
 
@@ -70,6 +74,13 @@ class MakeOffer extends Component {
         return (
             <div className="app flex-row align-items-center">
                 <Container>
+                    <Row className="justify-content-center">
+                        <Col md="6">
+                            <Alert color="success" isOpen={ this.state.success}>
+                                You have successfully made an offer!
+                            </Alert>
+                        </Col>
+                    </Row>
                     <Row className="justify-content-center">
                         <Col md="6">
                             <Card className="mx-4">
@@ -102,7 +113,7 @@ class MakeOffer extends Component {
                                         </Col>
                                     </FormGroup>
 
-                                    <Button color="success" block onClick={this.submitOffer}>Make offer</Button>
+                                    <Button color="success" block disabled={this.state.success} onClick={this.submitOffer}>Make offer</Button>
                                 </CardBody>
                             </Card>
                         </Col>
