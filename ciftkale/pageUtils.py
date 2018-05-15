@@ -317,17 +317,18 @@ def getAgentInfo(username):
 def getHomePageInfo():
     with connection.cursor() as cursor:
         try:
-      
+            cursor.execute("""SELECT c.league_name AVG(pl.overall_score) as acc 
+            FROM currentOccupations oc, Player pl, Club c
+            WHERE  oc.sportsman_username = pl.player_username AND c.club_name = oc.club_name
+            GROUP BY c.league_name
+            ORDER BY acc DESC LIMIT 10""")
+            rows = cursor.fetchall()
 
-            cursor.execute("""SELECT pl.dominant_foot AVG(pl.shot_accuracy) as acc 
-            FROM Player pl
-            GROUP BY pl.dominant_foot
-            ORDER BY acc""")
-            rows2 = cursor.fetchall()
+            
             
             return {
-                #'league_overalls': rows,
-                'accuracies_for_foot': rows2, 
+                'league_overalls': rows,
+                #'accuracies_for_foot': rows2, 
                 'result': 'success'
             }
 
