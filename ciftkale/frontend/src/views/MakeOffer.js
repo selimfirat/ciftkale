@@ -40,6 +40,12 @@ class MakeOffer extends Component {
                     });
             });
     }
+
+    submitOffer() {
+        const selected = document.querySelectorAll('#multiple-select option:checked');
+        const values2 = Array.from(selected).map((el) => el.value);
+    }
+
     render() {        
 
         return (
@@ -70,14 +76,14 @@ class MakeOffer extends Component {
                                                 this.state.myplayers.map(function(p) {
                                                     let pname = p[2] + ' ' + p[3];
                                                     let uname = p[5];
-                                                    return (<option value="{uname}">{pname}</option>);
+                                                    return (<option value={uname}>{pname}</option>);
                                                 })
                                             }
                                             </Input>
                                         </Col>
                                     </FormGroup>
 
-                                    <Button color="success" block>Make offer</Button>
+                                    <Button color="success" block onClick={this.submitOffer}>Make offer</Button>
                                 </CardBody>
                             </Card>
                         </Col>

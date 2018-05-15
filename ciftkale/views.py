@@ -236,14 +236,19 @@ def offers_view(request):
 
 @csrf_exempt
 def makeoffer_view(request):
-  date = request.GET['date']
-  price = request.GET['price']
-  sender = request.GET['sender']
-  reciever = request.GET['receiver']
+  r = json.loads(request.body)
+  date = r.get('date', 'null')
+  price = r['price']
+  sender = r['sender']
+  receiver = r['receiver']
+  players = r.get('players', [])
 
   offer_id = createOffer(date, price, sender, reciever)['offer_id']
 
-  #BUCKET creation ve bunun viewi yapılacak
+  for p in players:
+    createBucket(offer_id, p)
+
+  return JsonResponse({'result': 'success'})
 
 @csrf_exempt
 def respondtooffer_view(request):
