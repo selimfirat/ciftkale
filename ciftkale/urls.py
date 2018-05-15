@@ -36,8 +36,7 @@ urlpatterns = [
     path('api/agent', views.agent_view),
     path('api/players', views.players_view),
     path('api/player', views.player_view),
-    #path('api/offers', views.offers_view),
-    #path('api/makeoffer', views.makeoffer_view),
-    #path('api/acceptoffer', views.acceptoffer_view),
-    #path('api/declineoffer', views.declineoffer_view),
+    path('api/offers', views.offers_view),
+    path('api/makeoffer', views.makeoffer_view),
+    path('api/respondtooffer', views.respondtooffer_view),
 ]
