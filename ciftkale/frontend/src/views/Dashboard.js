@@ -364,7 +364,7 @@ const mainChart = {
 };
 
 const leagueChart = {
-    labels: ["Spanish Primera División", "Holland Eredivisie", "French Ligue 1", "German Bundesliga", "English Premier League", "English Premier League"],
+    labels: ["Spanish Primera División", "Holland Eredivisie", "French Ligue 1", "German Bundesliga", "English Premier League", "USA Major League Soccer"],
     datasets: [
         {
             label: 'Average Shoot Accuracies Grouped by League',
