@@ -54,15 +54,21 @@ def getOffersOfDirector(username):
                 offer_id = sentOffers[i][0]
                 
                 players = []
-                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, PlayerDirector pd, Person u WHERE u.username = p.player_username AND p.offer_id = %s AND pd.player_username = p.player_username AND pd.director_username = %s", [offer_id, username])
                 for p in cursor.fetchall():
                     players.append(p[0] + ' ' + p[1])
-                
-                sentOffers[i].append(players)
-                print("wtf")
                 print(players)
+                sentOffers[i].append(players)
+                newplayers = []
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, PlayerDirector pd, Person u WHERE u.username = p.player_username AND p.offer_id = %s AND pd.player_username = p.player_username", [offer_id])
+                for p in cursor.fetchall():
+                    name = p[0] + ' ' + p[1]
+                    if name not in players:
+                        newplayers.append(name)
+                print(newplayers)
+                sentOffers[i].append(newplayers)
         except DatabaseError:
-            #raise
+            raise
             return { 'result': 'failed' }
 
     with connection.cursor() as cursor:
@@ -73,14 +79,22 @@ def getOffersOfDirector(username):
                 offer_id = receivedOffers[i][0]
                 
                 players = []
-                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, PlayerDirector pd, Person u WHERE u.username = p.player_username AND p.offer_id = %s AND pd.player_username = p.player_username AND pd.director_username = %s", [offer_id, username])
                 for p in cursor.fetchall():
                     players.append(p[0] + ' ' + p[1])
                 print(players)
                 receivedOffers[i].append(players)
+                newplayers = []
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, PlayerDirector pd, Person u WHERE u.username = p.player_username AND p.offer_id = %s AND pd.player_username = p.player_username", [offer_id])
+                for p in cursor.fetchall():
+                    name = p[0] + ' ' + p[1]
+                    if name not in players:
+                        newplayers.append(name)
+                print(newplayers)
+                receivedOffers[i].append(newplayers)
             
         except DatabaseError:
-            #raise
+            raise
             return { 'result': 'failed' }
 
 
