@@ -100,6 +100,10 @@ class ListRealLeagues extends Component {
         this.fetchNewData = this.fetchNewData.bind(this);
     }
 
+    componentWillMount() {
+
+    }
+
 
     fetchNewData(state, instance) {
         this.setState({ loading: true });

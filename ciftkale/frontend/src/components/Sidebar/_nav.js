@@ -5,7 +5,6 @@ export default {
           name: "Dashboard",
           url: "/dashboard",
           icon: 'icon-puzzle',
-          auth: false
       },
       {
           title: true,
