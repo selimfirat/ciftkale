@@ -2,6 +2,12 @@ export default {
   items: [
 
       {
+          name: "Dashboard",
+          url: "/dashboard",
+          icon: 'icon-puzzle',
+          auth: false
+      },
+      {
           title: true,
           name: 'Authentication',
           wrapper: {            // optional wrapper object
@@ -14,19 +20,19 @@ export default {
       {
           name: "Login",
           url: "/login",
-          icon: 'icon-star',
+          icon: 'icon-user',
           auth: false
       },
       {
           name: "Register",
           url: "/register",
-          icon: 'icon-star',
+          icon: 'icon-user-follow',
           auth: false
       },
       {
           name: "Forgot Password?",
           url: "/forgotpassword",
-          icon: 'icon-star',
+          icon: 'icon-speech',
           auth: false
       },
 
@@ -43,17 +49,17 @@ export default {
       {
           name: "Leagues",
           url: "/leagues",
-          icon: 'icon-star'
+          icon: 'icon-globe'
       },
       {
           name: "Teams",
           url: "/teams",
-          icon: 'icon-star'
+          icon: 'icon-graph'
       },
       {
           name: "Players",
           url: "/players",
-          icon: 'icon-star'
+          icon: 'icon-people'
       },
       {
           name: "All Transfer Offers",
@@ -65,7 +71,7 @@ export default {
           name: "Your Pending Offers",
           url: "/offerstoaccept",
           director: true,
-          icon: 'icon-star',
+          icon: 'icon-options',
           auth: true
       },
 
@@ -82,19 +88,19 @@ export default {
       {
           name: "Change Password",
           url: "/account/changepassword",
-          icon: 'icon-star',
+          icon: 'icon-settings',
           auth: true
       },
       {
           name: "Delete Own Account",
           url: "/account/deleteownaccount",
-          icon: 'icon-star',
+          icon: 'icon-pencil',
           auth: true
       },
       {
           name: "Change Photo",
           url: "/account/changephoto",
-          icon: 'icon-star',
+          icon: 'icon-screen-smartphone',
           auth: true
       },
       {
@@ -106,7 +112,7 @@ export default {
       {
           name: "Logout",
           url: "/account/logout",
-          icon: 'icon-star',
+          icon: 'icon-energy',
           auth: true
       }
   ]

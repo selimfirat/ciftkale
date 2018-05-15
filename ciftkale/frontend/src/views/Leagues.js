@@ -74,14 +74,14 @@ const columns = [
             },
             {
                 accessor: "total_teams",
-                Header: "# of Teams",
-                width: 100
+                Header: "League Start",
+                width: 200
             },
             {
                 accessor: "total_budget",
-                Header: "Total Budget",
+                Header: "League End",
                 width: 200,
-                Cell: (row) => ( "$" + row.value)
+                Cell: (row) => ( row.value)
             }
         ]
     }
@@ -115,8 +115,8 @@ class ListRealLeagues extends Component {
             let data = res.data.res.map(rows => ({
                     name: rows[0],
                     country: rows[3],
-                    total_budget: 1337, // TODO: fix this with backend m88
-                    total_teams: 1337,
+                    total_budget: rows[1], // TODO: fix this with backend m88
+                    total_teams: rows[2],
                     country_logo: "tr" // herkes Türk hocam
                 })
             );

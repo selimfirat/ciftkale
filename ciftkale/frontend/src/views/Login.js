@@ -60,7 +60,7 @@ export default class Login extends Component {
         localStorage["username"] = username;
         console.log(username)
         localStorage["director"] = (username === "Allen");
-        this.props.history.push('/leagues');
+        this.props.history.push('/dashboard');
     }
 
     loginFail(error) {
