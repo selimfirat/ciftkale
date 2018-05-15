@@ -330,9 +330,9 @@ def getHomePageInfo():
             
             return {
                 'scorer_names' : scorers,
-                'scores': rows[:][3],
+                'scores': rows[:][2],
                 'shooter_names' : shooters,
-                'accuracies' :  rows2[:][3],
+                'accuracies' :  rows2[:][2],
                 'result': 'success'
             }
 
