@@ -74,6 +74,13 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
             if not agent_username:
                 agent_username = ''
 
+            filter_start = 0
+            filter_end = 100
+            if filter_overall is not "":
+                fs = filter_overall.split("-")
+                filter_start = int(fs[0])
+                filter_end = int(fs[1]) if len(fs) > 1 else int(fs[0])
+
             cursor.execute(
                 """
                 SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score, u.username,
@@ -85,14 +92,15 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 AND p.nationality ILIKE %s 
                 AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
                 AND p.agent_username ILIKE %s
-                AND p.overall_score::varchar ILIKE %s
+                AND p.overall_score BETWEEN %d AND %d
                 """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
                 "%" + filter_name + "%",
                 "%" + filter_name + "%", 
                 "%" + agent_username + "%",
-                "%" + filter_overall + "%",
+                filter_start,
+                filter_end,
                 items_per_page, 
                 page_num * items_per_page]
             )
