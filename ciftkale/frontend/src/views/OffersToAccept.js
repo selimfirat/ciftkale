@@ -78,9 +78,9 @@ class OffersToAccept extends Component {
                                         <dt className="col-sm-4">State</dt>
                                         <dd className="col-sm-8">{offer[3]}</dd>
                                         <dt className="col-sm-4">Offered Player(s)</dt>
-                                        <dd className="col-sm-8">{/* offer[6].map(e =>  (<p>{e}</p>)) */}</dd>
+                                        <dd className="col-sm-8">{offer[6] && offer[6].map(e =>  (<p>{e}</p>)) }</dd>
                                         <dt className="col-sm-4">Your player(s) in Return</dt>
-                                        <dd className="col-sm-8">{/*offer.players_in_return.map(e => <p> {e} </p>) */}</dd>
+                                        <dd className="col-sm-8">{offer[7] && offer[7].map(e =>  (<p>{e}</p>)) }</dd>
                                     </dl>
                                 </CardBody>
                                 <CardFooter>
