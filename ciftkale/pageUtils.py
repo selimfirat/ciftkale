@@ -76,7 +76,7 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
 
             cursor.execute(
                 """
-                SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score,
+                SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score, u.username,
                 count(*) OVER() as full_count 
                 FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
                 WHERE u.username = p.player_username 
@@ -157,14 +157,14 @@ def getPlayerInfo(username):
         red_card = row[0]
 
         return {
-            'position' : position,
+            'position_name' : position,
             'kit_number' : kit_number,
             'weight' : weight,
             'height' : height,
             'dominant_foot' : dominant_foot,
-            'full_name' : full_name, 
+            'name' : full_name, 
             'salary' : salary,
-            'club' : team,
+            'team' : team,
             'goal' : goal,
             'assist' : assist,
             'shot' : shot,

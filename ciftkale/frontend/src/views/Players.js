@@ -32,6 +32,8 @@ const data = [
 ];
 */
 
+let pname_map = {};
+
 const columns = [
     {
         Header: "Team",
@@ -86,7 +88,7 @@ const columns = [
                 Header: 'Name',
                 filterable: true,
                 filterAll: true,
-                Cell: (row) => ( <Link to={"/players/" + row.value}>{row.value}</Link>)
+                Cell: (row) => ( <Link to={"/players/" + pname_map[row.value]}>{row.value}</Link>)
             },
             {
                 accessor: 'overall',
@@ -151,6 +153,13 @@ class ListRealPlayers extends Component {
             state.filtered
         ).then(res => {
             console.log(res);
+
+            for (let rows of res.data.res) {
+                let pname = rows[2] + ' ' + rows[3];
+                let uname = rows[5];
+                pname_map[pname] = uname;
+            }
+            console.log(pname_map);
 
             let flags = ["tr", "ec", "es", "it", "et", "fi", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc"];
 
