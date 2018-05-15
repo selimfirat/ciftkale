@@ -31,12 +31,13 @@ class ViewDirector extends Component {
 
 
     componentWillMount() {
-        axios.get("https://ciftkale.herokuapp.com/api/director/", {
+        axios.get("https://ciftkale.herokuapp.com/api/director", {
             params: {
-                name: this.props.match.params.id
+                username: "Lopez" // this.props.match.params.id
             }
         }).then((response) => {
-            this.setState({director: response.data})
+            console.log(response.data);
+            this.setState({director: response.data});
         });
     }
 
@@ -48,10 +49,10 @@ class ViewDirector extends Component {
 
         this.state = {
             director: {
-                name: "Orkun Alpar",
+                full_name: "Orkun Alpar",
                 img: "orkun.jpg",
                 date_of_birth: "03/11/1996",
-                team: "Arsenal",
+                club_name: "Arsenal",
                 salary: 290000000
             }
         };
@@ -60,23 +61,22 @@ class ViewDirector extends Component {
 
     render() {
 
-        return (
-            <div className="animated fadeIn">
+        return (<div className="animated fadeIn">
                 <Row>
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Director: {this.state.director.name}
+                                <i className="fa fa-align-justify"></i> Director: {this.state.director.full_name}
                             </CardHeader>
                                 <CardBody>
                                     <Row>
                                         <Col xs="12" sm="4" lg="2">
-                                            <img style={{width: "200px", height: "200px"}} src={"img/directors/" + this.state.director.img} alt=""/>
+                                            <img style={{width: "200px", height: "200px"}} src={"img/directors/orkun.jpg"} alt=""/>
                                         </Col>
                                         <Col xs="12" sm="8" lg="10">
                                             <Row>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={this.state.director.name}
+                                                    <Widget02 header={this.state.director.full_name}
                                                               mainText="Name" icon="fa fa-wpexplorer" color="primary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
@@ -88,7 +88,7 @@ class ViewDirector extends Component {
                                                               icon="fa fa-mixcloud" color="secondary"/>
                                                 </Col>
                                                 <Col xs="12" sm="6" lg="3">
-                                                    <Widget02 header={this.state.director.team} mainText="Team" icon="fa fa-codiepie"
+                                                    <Widget02 header={this.state.director.club_name} mainText="Team" icon="fa fa-codiepie"
                                                               color="warning"/>
                                                 </Col>
                                             </Row>
@@ -97,7 +97,7 @@ class ViewDirector extends Component {
                                     <Row style={{ paddingTop: "15px", textAlign: "right"}}>
                                         <Col>
                                             <NavLink href="#/offers">
-                                                <Button color="secondary">View Offers made by {this.state.director.name}</Button>
+                                                <Button color="secondary">View Offers made by {this.state.director.full_name}</Button>
                                             </NavLink>
                                         </Col>
                                     </Row>

@@ -31,7 +31,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://localhost:5000/api/leagues', { params: params });
+    return axios.get('https://ciftkale.herokuapp.com/api/leagues', { params: params });
 };
 
 let country = "";
@@ -59,7 +59,8 @@ const columns = [
                         onChange={event => { onChange(event.target.value); country = event.target.value} }
                         value={ country }
                         style={{ width: '100%' }}
-                    />)},
+                    />)
+                },
                 Cell: (row) => ( <Link to={"/leagues?country=" + row.value}>{row.value}</Link>)
 
             },

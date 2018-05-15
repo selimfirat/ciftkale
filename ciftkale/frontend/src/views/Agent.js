@@ -27,15 +27,16 @@ const coach = {
     player: "Sergi Roberto"
 };
 */
+
 class ViewAgent extends Component {
 
     componentWillMount() {
-        axios.get("https://ciftkale.herokuapp.com/api/agent/", {
+        axios.get("https://ciftkale.herokuapp.com/api/agent", {
             params: {
-                name: this.props.match.params.id
+                username: this.props.match.params.id
             }
         }).then((response) => {
-            this.setState({player: response.data})
+            this.setState({agent: response.data})
         });
     }
 
@@ -48,10 +49,7 @@ class ViewAgent extends Component {
         this.state = {
             agent: {
                 name: "Hakan Türkmenoğlu",
-                img: "hakan.jpg",
                 date_of_birth: "15/09/1996",
-                team: "Barcelona",
-                salary: 190000000,
                 players: ["Sergi Roberto", "Webner Şahıstan"]
             }
         };
@@ -71,7 +69,7 @@ class ViewAgent extends Component {
                             <CardBody>
                                 <Row>
                                     <Col xs="12" sm="4" lg="2">
-                                        <img src={"img/agents/" + this.state.agent.img} alt=""/>
+                                        <img src="img/agents/hakan.jpg" alt=""/>
                                     </Col>
                                     <Col xs="12" sm="8" lg="10">
                                         <Row>
@@ -80,17 +78,13 @@ class ViewAgent extends Component {
                                                           mainText="Name" icon="fa fa-wpexplorer" color="primary"/>
                                             </Col>
                                             <Col xs="12" sm="6" lg="3">
-                                                <Widget02 header={this.state.agent.date_of_birth} mainText="Date of Birth"
+                                                <Widget02 header="05/27/1987" mainText="Date of Birth"
                                                           icon="fa fa-wpexplorer" color="primary"/>
-                                            </Col>
-                                            <Col xs="12" sm="6" lg="3">
-                                                <Widget02 header={"$" + this.state.agent.salary} mainText="Salary"
-                                                          icon="fa fa-mixcloud" color="secondary"/>
                                             </Col>
                                             {this.state.agent.players.map(function (player) {
                                                 return (
                                                     <Col xs="12" sm="6" lg="3">
-                                                        <Widget02 header={<Link to={"/players/" + player}>{player}</Link>} mainText="Player" icon="fa fa-codiepie" color="warning"/>
+                                                        <Widget02 header={<Link to={"/a/" + player}>{player}</Link>} mainText="Player" icon="fa fa-codiepie" color="warning"/>
                                                     </Col>
                                                 )
                                             })}

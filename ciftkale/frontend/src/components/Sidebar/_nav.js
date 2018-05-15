@@ -63,7 +63,8 @@ export default {
       },
       {
           name: "Your Pending Offers",
-          url: "/offers",
+          url: "/offerstoaccept",
+          director: true,
           icon: 'icon-star',
           auth: true
       },
