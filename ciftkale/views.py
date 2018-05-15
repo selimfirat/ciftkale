@@ -8,6 +8,7 @@ from django.db import connection
 from .pageUtils import *
 from .accounting import *
 from .manageAccount import *
+from .offerTest import*
 
 import json
 
@@ -166,13 +167,11 @@ def players_view(request):
   filterPlayer    = request.GET.get('filterPlayer', '')
   filterTeam      = request.GET.get('filterTeam', '')
   filterAgent     = request.GET.get('filterAgent', '')
-  filterOverall   = request.GET.get('filterOverall', '')
 
   sort_map = {
     'name': 'u.first_name || u.last_name',
     'country': 'p.nationality',
-    'team': 'c.club_name',
-    'overall': 'p.overall_score'
+    'team': 'c.club_name'
   }
 
   sortQuery = ""
@@ -187,7 +186,7 @@ def players_view(request):
       if info['id'] in sort_map:
         sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
 
-  response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, filterOverall, sortQuery, pageSize, page)
+  response = getPlayersTable(filterTeam, filterCountry, filterPlayer, filterAgent, sortQuery, pageSize, page)
   return JsonResponse(response)
 
 
@@ -218,3 +217,41 @@ def agent_view(request):
 
     response = getAgentInfo(username)
     return JsonResponse(response)
+
+@csrf_exempt
+def club_view(request):
+    clubname  = request.GET['club_name']
+
+    response = getClubInfo(clubname)
+    return JsonResponse(response)
+
+@csrf_exempt
+def offers_view(request):
+  director  = request.GET['director']
+
+  response = getOffersOfDirector(director)
+  return JsonResponse(response)
+
+@csrf_exempt
+def makeoffer_view(request):
+  date = request.GET['date']
+  price = request.GET['price']
+  sender = request.GET['sender']
+  reciever = request.GET['receiver']
+
+  offer_id = createOffer(date, price, sender, reciever)['offer_id']
+
+  #BUCKET creation ve bunun viewi yapılacak
+
+@csrf_exempt
+def respondtooffer_view(request):
+  offer_id = request.GET['o_id']
+  respond = request.GET['respond']
+
+  res = respondToOffer(offer_id, respond)
+  return JsonResponse(res)
+
+@csrf_exempt
+def home_view(request):
+  res = getHomePageInfo()
+  return JsonResponse(res)

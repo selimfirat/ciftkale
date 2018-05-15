@@ -12,7 +12,7 @@ class Logout extends Component {
     }
 
     render() {
-        this.props.history.push('/leagues')
+        this.props.history.push('/dashboard')
         return (
             <div className="app flex-row align-items-center">
                 <Container>

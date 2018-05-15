@@ -31,7 +31,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://localhost:5000/api/leagues', { params: params });
+    return axios.get('https://ciftkale.herokuapp.com/api/leagues', { params: params });
 };
 
 let country = "";
@@ -59,7 +59,8 @@ const columns = [
                         onChange={event => { onChange(event.target.value); country = event.target.value} }
                         value={ country }
                         style={{ width: '100%' }}
-                    />)},
+                    />)
+                },
                 Cell: (row) => ( <Link to={"/leagues?country=" + row.value}>{row.value}</Link>)
 
             },
@@ -73,14 +74,14 @@ const columns = [
             },
             {
                 accessor: "total_teams",
-                Header: "# of Teams",
-                width: 100
+                Header: "League Start",
+                width: 200
             },
             {
                 accessor: "total_budget",
-                Header: "Total Budget",
+                Header: "League End",
                 width: 200,
-                Cell: (row) => ( "$" + row.value)
+                Cell: (row) => ( row.value)
             }
         ]
     }
@@ -111,12 +112,13 @@ class ListRealLeagues extends Component {
         ).then(res => {
             console.log(res);
 
+            let flags = ["tr", "ec", "es", "it", "et", "fi", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc"];
             let data = res.data.res.map(rows => ({
                     name: rows[0],
                     country: rows[3],
-                    total_budget: 1337, // TODO: fix this with backend m88
-                    total_teams: 1337,
-                    country_logo: "tr" // herkes Türk hocam
+                    total_budget: rows[2], // TODO: fix this with backend m88
+                    total_teams: rows[1],
+                    country_logo: flags[Math.floor(Math.random()*flags.length)] // herkes Türk hocam
                 })
             );
 

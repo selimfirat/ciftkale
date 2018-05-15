@@ -35,6 +35,7 @@ import MakeOffer from "../../views/MakeOffer";
 import MakeOfferTeam from "../../views/MakeOfferTeam";
 import OffersToAccept from "../../views/OffersToAccept";
 import Logout from "../../views/Logout";
+import Dashboard from "../../views/Dashboard";
 
 class Full extends Component {
   render() {
@@ -46,6 +47,7 @@ class Full extends Component {
           <main className="main">
             <Container fluid>
               <Switch>
+                <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
                 <Route path="/login" name="Login" component={Login}/>
                 <Route path="/register" name="Register" component={Register}/>
                 <Route path="/404" name="Page404" component={Page404}/>
@@ -71,7 +73,7 @@ class Full extends Component {
                 <Route path="/account/changepassword" component={ChangePassword}/>
                 <Route path="/account/deleteownaccount" component={DeleteOwnAccount}/>
                 <Route path="/account/logout" component={Logout}/>
-                <Redirect from="/" to="/leagues"/>
+                <Redirect from="/" to="/dashboard"/>
               </Switch>
             </Container>
           </main>

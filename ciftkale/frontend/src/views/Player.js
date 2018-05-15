@@ -36,9 +36,9 @@ const player = {
 class ViewPlayer extends Component {
 
     componentWillMount() {
-        axios.get("https://ciftkale.herokuapp.com/api/player/", {
+        axios.get("https://ciftkale.herokuapp.com/api/player", {
             params: {
-                name: this.props.match.params.id
+                username: this.props.match.params.id
             }
         }).then((response) => {
             this.setState({player: response.data})
