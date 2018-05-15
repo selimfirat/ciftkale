@@ -152,6 +152,7 @@ def clubs_view(request):
       if info['id'] in sort_map:
         sortQuery += f" {sort_map[info['id']]} {'DESC' if info['desc'] else 'ASC'} "
 
+  print(sortQuery)
   response = getClubsTable(filterCountry, filterLeague, filterTeam, filterCoach, filterDirector, filterStanding, sortQuery, pageSize, page)
   return JsonResponse(response)
 

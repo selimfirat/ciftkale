@@ -70,7 +70,7 @@ const requestData = (page, pageSize, sortInfo, filterInfo) => {
         }
     }
 
-    return axios.get('http://localhost:5000/api/clubs', { params: params });
+    return axios.get('http://localhost:8000/api/clubs', { params: params });
 };
 
 const columns = [
