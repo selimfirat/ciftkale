@@ -137,7 +137,7 @@ class Sidebar extends Component {
     // nav list
     const navList = (items) => {
       return items.map( (item, index) => {
-        if (item.director && !localStorage["director"])
+        if (item.director && localStorage["director"] === "false")
           return;
         else if (item.auth === undefined || ((item.auth && localStorage["username"]) || (!item.auth && !localStorage["username"])))
             return navType(item, index);
