@@ -51,6 +51,13 @@ def getOffersOfDirector(username):
         try:
             cursor.execute("SELECT * FROM offer WHERE director_sender = %s", [username])
             sentOffers = cursor.fetchall()
+            for i in range(len(sentOffers)):
+                offer_id = sentOffers[i][0]
+                
+                cursor.execute("SELECT u.first_name || ' ' || u.last_name FROM Bucket b, Player p, Person u WHERE u.username = p.player_username AND b.offer_id = %s", [offer_id])
+                players = cursor.fetchall()
+                sentOffers[i].append(players)
+                
         except DatabaseError:
             #raise
             return { 'result': 'failed' }
@@ -59,6 +66,13 @@ def getOffersOfDirector(username):
         try:
             cursor.execute("SELECT * FROM offer WHERE director_receiver = %s", [username])
             receivedOffers = cursor.fetchall()
+            for i in range(len(receivedOffers)):
+                offer_id = receivedOffers[i][0]
+                
+                cursor.execute("SELECT u.first_name || ' ' || u.last_name FROM Bucket b, Player p, Person u WHERE u.username = p.player_username AND b.offer_id = %s", [offer_id])
+                players = cursor.fetchall()
+                receivedOffers[i].append(players)
+            
         except DatabaseError:
             #raise
             return { 'result': 'failed' }
