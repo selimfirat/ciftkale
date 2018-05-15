@@ -1,7 +1,77 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText, FormGroup, Label } from 'reactstrap';
+const qs = require('query-string');
+import axios from 'axios';
 
 class MakeOfferTeam extends Component {
+    constructor(props) {
+        super(props);
+
+        let director = localStorage['username'];
+
+        let params = qs.parse(props.location.search);
+
+        this.your_club_name = params.team ? params.team : "";
+
+        this.my_club_name = null;
+        this.director_name = null;
+
+        this.state = {
+            myplayers: [],
+            yourplayers: [],
+        }
+
+        axios.get('http://ciftkale.herokuapp.com/api/director', {params: {username: director}})
+            .then(res => {
+                this.my_club_name = res.data.club_name;
+                let params = {
+                    'page': 0,
+                    'pageSize': 1000,
+                    'sortInfo': [],
+                    'filterTeam': this.my_club_name
+                }
+                axios.get('http://ciftkale.herokuapp.com/api/players', {params: params})
+                    .then(res => {
+                        this.setState({myplayers: res.data.res})
+                    });
+                    
+            });
+        axios.get('http://ciftkale.herokuapp.com/api/club',{params: {
+            'club_name': this.your_club_name
+        }}).then(res => {
+            this.your_director_name = res.data.director_username;
+
+            let params = {
+                'page': 0,
+                'pageSize': 1000,
+                'sortInfo': [],
+                'filterTeam': this.your_club_name
+            }
+            axios.get('http://ciftkale.herokuapp.com/api/players', {params: params})
+                .then(res => {
+                    this.setState({yourplayers: res.data.res})
+                });
+        });
+
+        this.submitOffer = this.submitOffer.bind(this);
+    }
+
+    submitOffer() {
+        const selected = document.querySelectorAll('#multiple-select-sender option:checked');
+        const senderplayers = Array.from(selected).map((el) => el.value);
+        const selected2 = document.querySelectorAll('#multiple-select-receiver option:checked');
+        const receiverplayers = Array.from(selected).map((el) => el.value);
+
+        const price = 0+document.querySelector('#price').value;
+
+        axios.post('http://ciftkale.herokuapp.com/api/makeoffer', {
+            price: price,
+            players: receiverplayers.concat(senderplayers),
+            sender: localStorage['username'],
+            receiver: this.your_director_name
+        });
+    }
+
     render() {
         return (
             <div className="app flex-row align-items-center">
@@ -10,7 +80,7 @@ class MakeOfferTeam extends Component {
                         <Col md="6">
                             <Card className="mx-4">
                                 <CardBody className="p-4">
-                                    <h1>Make Offer: Barcelona</h1>
+                                    <h1>Make Offer: {this.your_club_name}</h1>
                                     <p className="text-muted">You can make offer via money and also optionally by adding some players from your team to the bucket.</p>
                                     <InputGroup className="mb-3">
                                         <InputGroupAddon addonType="prepend">
@@ -18,7 +88,7 @@ class MakeOfferTeam extends Component {
                                                 <i className="fa fa-money"></i>
                                             </InputGroupText>
                                         </InputGroupAddon>
-                                        <Input type="text" placeholder="($) Money Amount"/>
+                                        <Input type="text" placeholder="($) Money Amount" id="price"/>
                                     </InputGroup>
 
                                     <FormGroup row>
@@ -26,13 +96,14 @@ class MakeOfferTeam extends Component {
                                             <Label htmlFor="multiple-select">Select Players in target team to get as bucket</Label>
                                         </Col>
                                         <Col md="9">
-                                            <Input type="select" name="multiple-select" id="multiple-select" multiple>
-                                                <option value="1">Target Team Player #1</option>
-                                                <option value="1">Target Team Player #2</option>
-                                                <option value="1">Target Team Player #3</option>
-                                                <option value="1">Target Team Player #4</option>
-                                                <option value="1">Target Team Player #5</option>
-                                                <option value="1">Target Team Player #6</option>
+                                            <Input type="select" name="multiple-select" id="multiple-select-receiver" multiple>
+                                            {
+                                                this.state.yourplayers.map(function(p) {
+                                                    let pname = p[2] + ' ' + p[3];
+                                                    let uname = p[5];
+                                                    return (<option value={uname}>{pname}</option>);
+                                                })
+                                            }
                                             </Input>
                                         </Col>
                                     </FormGroup>
@@ -42,18 +113,19 @@ class MakeOfferTeam extends Component {
                                             <Label htmlFor="multiple-select">Select Players in your team to send as bucket</Label>
                                         </Col>
                                         <Col md="9">
-                                            <Input type="select" name="multiple-select" id="multiple-select" multiple>
-                                                <option value="1">Player #1</option>
-                                                <option value="1">Player #2</option>
-                                                <option value="1">Player #3</option>
-                                                <option value="1">Player #4</option>
-                                                <option value="1">Player #5</option>
-                                                <option value="1">Player #6</option>
+                                            <Input type="select" name="multiple-select" id="multiple-select-sender" multiple>
+                                            {
+                                                this.state.myplayers.map(function(p) {
+                                                    let pname = p[2] + ' ' + p[3];
+                                                    let uname = p[5];
+                                                    return (<option value={uname}>{pname}</option>);
+                                                })
+                                            }
                                             </Input>
                                         </Col>
                                     </FormGroup>
 
-                                    <Button color="success" block>Make offer</Button>
+                                    <Button color="success" block onClick={this.submitOffer}>Make offer</Button>
                                 </CardBody>
                             </Card>
                         </Col>

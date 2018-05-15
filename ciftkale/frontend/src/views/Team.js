@@ -6,7 +6,8 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Button
+    Button,
+    NavLink
 } from 'reactstrap';
 import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
@@ -15,32 +16,8 @@ import Widget02 from './Widgets/Widget02';
 
 const qs = require('query-string');
 
-const team = {
-    name: "Barcelona",
-    league: "Liga BBVA",
-    short_name: "BAR",
-    logo: "barcelona.png",
-    date_of_foundation: "11/122/1950",
-    stadium: "Camp Nou",
-    budget: "195000",
-    players: [
-        {
-            team_logo: "barcelona.png",
-            team: "Barcelona",
-            country_logo: "es",
-            country: "Spanish",
-            player_img: "sergi_roberto.png",
-            name: "Sergi Roberto",
-            overall: 94
-
-        }
-    ],
-    coach: "Ernesto Valverde",
-    director: "Josep Maria Bartomeu i Floreta"
-};
-
 let league = "";
-let team_filter = team.name;
+let team_filter = "";
 let country = ""
 
 const columns = [
@@ -58,14 +35,6 @@ const columns = [
                 accessor: 'team',
                 Header: 'Name',
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, team_filter), 1);
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); team_filter = event.target.value} }
-                            value={ team_filter }
-                            style={{ width: '100%' }}
-                        />)},
                 Cell: (row) => ( <Link to={"/players?team=" + row.value}>{row.value}</Link>),
                 filterAll: true,
 
@@ -88,14 +57,6 @@ const columns = [
                 Header: "Nation",
                 width: 150,
                 filterable: true,
-                Filter: ({filter, onChange}) => {
-                    setTimeout(onChange.bind(this, country), 1)
-                    return (
-                        <input
-                            onChange={event => { onChange(event.target.value); country = event.target.value} }
-                            value={ country }
-                            style={{ width: '100%' }}
-                        />)},
                 filterAll: true,
                 Cell: (row) => ( <Link to={"/players?country=" + row.value}>{row.value}</Link>)
 
@@ -125,10 +86,42 @@ const columns = [
 
 
 class ViewTeam extends Component {
+    constructor(props) {
+        super(props);
+
+        let p = location.href.split('/');
+        this.team_name = decodeURIComponent(p[p.length-1]);
+
+        this.state = {
+            team: {
+                name: "Barcelona",
+                league: "Liga BBVA",
+                short_name: "BAR",
+                logo: "barcelona.png",
+                date_of_foundation: "11/122/1950",
+                stadium: "Camp Nou",
+                budget: "195000",
+                players: [
+                    {
+                        team_logo: "barcelona.png",
+                        team: "Barcelona",
+                        country_logo: "es",
+                        country: "Spanish",
+                        player_img: "sergi_roberto.png",
+                        name: "Sergi Roberto",
+                        overall: 94
+            
+                    }
+                ],
+                coach: "Ernesto Valverde",
+                director: "Josep Maria Bartomeu i Floreta"
+            }            
+        }
+    }
 
 
     render(props) {
-
+        const {team} = this.state;
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -173,7 +166,9 @@ class ViewTeam extends Component {
                                 </Row>
                                 <Row>
                                     <Col style={{textAlign: "right"}}>
+                                    <NavLink href={"#/makeOfferTeam?team=" + encodeURIComponent(this.team_name)}>
                                         <Button color="primary">Make Offer</Button>
+                                    </NavLink>
                                     </Col>
                                 </Row>
                             </CardBody>
