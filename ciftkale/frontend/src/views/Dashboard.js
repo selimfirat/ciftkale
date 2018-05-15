@@ -355,8 +355,8 @@ const mainChart = {
     datasets: [
         {
             label: 'Average Shoot Accuracies Grouped by Dominant Foot',
-            backgroundColor: convertHex(brandInfo, 10),
-            borderColor: brandInfo,
+            backgroundColor: convertHex(brandSuccess, 10),
+            borderColor: brandSuccess,
             pointHoverBackgroundColor: '#fff',
             borderWidth: 2,
             data: [58.3, 73.5]
@@ -369,8 +369,8 @@ const scorersChart = {
     datasets: [
         {
             label: 'Best Scorers',
-            backgroundColor: convertHex(brandInfo, 10),
-            borderColor: brandInfo,
+            backgroundColor: convertHex(brandPrimary, 10),
+            borderColor: brandPrimary,
             pointHoverBackgroundColor: '#fff',
             borderWidth: 2,
             data: []
@@ -382,7 +382,7 @@ const shootersChart = {
     labels: [],
     datasets: [
         {
-            label: 'Best Shooters',
+            label: 'Best Shooters (Accuracy)',
             backgroundColor: convertHex(brandInfo, 10),
             borderColor: brandInfo,
             pointHoverBackgroundColor: '#fff',
@@ -484,6 +484,47 @@ class Dashboard extends Component {
                     <Col style={{paddingTop: "15px"}}>
 
                         <Col sm="5">
+                            <CardTitle className="mb-0">Best Scorers</CardTitle>
+                        </Col>
+                        <Card>
+                            <CardBody>
+                                <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
+                                    <HorizontalBar data={scorersChart} options={mainChartOpts} height={300}/>
+                                </div>
+                            </CardBody>
+                            <CardFooter>
+                                <p>Statistics are provided by Ciftkale Transfer Market.</p>
+                            </CardFooter>
+                        </Card>
+                    </Col>
+                </Row>
+
+                <Row>
+
+                    <Col style={{paddingTop: "15px"}}>
+
+                        <Col sm="5">
+                            <CardTitle className="mb-0">Best Shooters (Accuracy)</CardTitle>
+                        </Col>
+                        <Col>
+                            <Card>
+                                <CardBody>
+                                    <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
+                                        <HorizontalBar data={shootersChart} options={mainChartOpts} height={300}/>
+                                    </div>
+                                </CardBody>
+                                <CardFooter>
+                                    <p>Statistics are provided by Ciftkale Transfer Market.</p>
+                                </CardFooter>
+                            </Card>
+                        </Col>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col style={{paddingTop: "15px"}}>
+
+                        <Col sm="5">
                             <CardTitle className="mb-0">Shoot accuracies of players grouped by Dominant foot</CardTitle>
                         </Col>
                         <Card>
@@ -520,47 +561,6 @@ class Dashboard extends Component {
                         </Col>
                     </Col>
                 </Row>
-                <Row>
-                    <Col style={{paddingTop: "15px"}}>
-
-                        <Col sm="5">
-                            <CardTitle className="mb-0">Best Scorers</CardTitle>
-                        </Col>
-                        <Card>
-                            <CardBody>
-                                <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
-                                    <HorizontalBar data={scorersChart} options={mainChartOpts} height={300}/>
-                                </div>
-                            </CardBody>
-                            <CardFooter>
-                                <p>Statistics are provided by Ciftkale Transfer Market.</p>
-                            </CardFooter>
-                        </Card>
-                    </Col>
-                </Row>
-
-                <Row>
-
-                    <Col style={{paddingTop: "15px"}}>
-
-                        <Col sm="5">
-                            <CardTitle className="mb-0">Best Shooters</CardTitle>
-                        </Col>
-                        <Col>
-                            <Card>
-                                <CardBody>
-                                    <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
-                                        <HorizontalBar data={shootersChart} options={mainChartOpts} height={300}/>
-                                    </div>
-                                </CardBody>
-                                <CardFooter>
-                                    <p>Statistics are provided by Ciftkale Transfer Market.</p>
-                                </CardFooter>
-                            </Card>
-                        </Col>
-                    </Col>
-                </Row>
-
             </div>
         )
     }
