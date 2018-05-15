@@ -61,7 +61,12 @@ class MakeOfferTeam extends Component {
         const selected = document.querySelectorAll('#multiple-select-sender option:checked');
         const senderplayers = Array.from(selected).map((el) => el.value);
         const selected2 = document.querySelectorAll('#multiple-select-receiver option:checked');
-        const receiverplayers = Array.from(selected).map((el) => el.value);
+        const receiverplayers = Array.from(selected2).map((el) => el.value);
+
+        console.log(senderplayers);
+        console.log(receiverplayers);
+        console.log(receiverplayers.concat(senderplayers));
+        
 
         const price = 0+document.querySelector('#price').value;
         let self = this;

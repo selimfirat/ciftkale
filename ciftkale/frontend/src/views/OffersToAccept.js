@@ -27,11 +27,12 @@ import axios from 'axios';
 class OffersToAccept extends Component {
 
     componentWillMount() {
-        axios.get("https://ciftkale.herokuapp.com/api/offers", {
+        axios.get("http://localhost:8000/api/offers", {
             params: {
                 director: localStorage["username"]
             }
         }).then((response) => {
+            console.log(response);
             this.setState({offers: response.data.receivedOffers })
         });
     }
