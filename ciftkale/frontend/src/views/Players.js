@@ -5,7 +5,7 @@ import {
     Col,
     Card,
     CardHeader,
-    CardBody,
+    CardBody, CardFooter,
 } from 'reactstrap';
 import ReactTable from 'react-table'
 import matchSorter from 'match-sorter'
@@ -211,6 +211,9 @@ class ListRealPlayers extends Component {
                                     ]}
                                 />
                             </CardBody>
+                            <CardFooter>
+                                Please enter a range like "70-92" into Overall input to search a range over overall scores of players.
+                            </CardFooter>
                         </Card>
                     </Col>
                 </Row>
