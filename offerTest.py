@@ -55,9 +55,9 @@ def getOffersOfDirector(username):
                 offer_id = sentOffers[i][0]
                 
                 players = []
-                cursor.execute("SELECT u.first_name || ' ' || u.last_name FROM Bucket b, Player p, Person u WHERE u.username = p.player_username AND b.offer_id = %s", [offer_id])
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
                 for p in cursor.fetchall():
-                    players.append(p[0])
+                    players.append(p[0] + ' ' p[1])
                 
                 sentOffers[i].append(players)
 
@@ -73,10 +73,10 @@ def getOffersOfDirector(username):
                 offer_id = receivedOffers[i][0]
                 
                 players = []
-                cursor.execute("SELECT u.first_name || ' ' || u.last_name FROM Bucket b, Player p, Person u WHERE u.username = p.player_username AND b.offer_id = %s", [offer_id])
+                cursor.execute("SELECT u.first_name, u.last_name FROM (Bucket NATURAL JOIN Player) p, Person u WHERE u.username = p.player_username AND p.offer_id = %s", [offer_id])
                 for p in cursor.fetchall():
-                    players.append(p[0])
-                    
+                    players.append(p[0] + ' ' p[1])
+
                 receivedOffers[i].append(players)
             
         except DatabaseError:
