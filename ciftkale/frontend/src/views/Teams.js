@@ -197,6 +197,7 @@ class ListRealTeams extends Component {
         ).then(res => {
             console.log(res);
 
+            let flags = ["tr", "ec", "es", "it", "et", "fi", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc"];
             let data = res.data.res.map(rows => ({
                     standing: rows[0],
                     country: rows[1],
@@ -206,7 +207,7 @@ class ListRealTeams extends Component {
                     director: rows[5],
                     budget: rows[6],
                     short_name: rows[7],
-                    country_logo: "tr" // herkes Türk hocam
+                    country_logo: flags[Math.floor(Math.random()*flags.length)] // herkes Türk hocam
                 })
             );
 

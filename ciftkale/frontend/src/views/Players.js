@@ -161,12 +161,14 @@ class ListRealPlayers extends Component {
             }
             console.log(pname_map);
 
+            let flags = ["tr", "ec", "es", "it", "et", "fi", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc"];
+
             let data = res.data.res.map(rows => ({
                     team: rows[0],
                     country: rows[1],
                     name: rows[2] + ' ' + rows[3],
                     overall: rows[4],
-                    country_logo: "tr" // herkes Türk hocam
+                    country_logo: flags[Math.floor(Math.random()*flags.length)] // herkes Türk hocam
                 })
             );
 

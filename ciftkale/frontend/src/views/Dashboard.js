@@ -438,7 +438,11 @@ class Dashboard extends Component {
         return (
             <div className="animated fadeIn">
                 <Row>
-                    <Col>
+                    <Col style={{paddingTop: "15px"}}>
+
+                        <Col sm="5">
+                            <CardTitle className="mb-0">Shoot accuracies of players grouped by Dominant foot</CardTitle>
+                        </Col>
                         <Card>
                             <CardBody>
                                 <div className="chart-wrapper" style={{height: 300 + 'px', marginTop: 40 + 'px'}}>
@@ -453,6 +457,12 @@ class Dashboard extends Component {
                 </Row>
 
                 <Row>
+
+                    <Col style={{paddingTop: "15px"}}>
+
+                        <Col sm="5">
+                            <CardTitle className="mb-0">Shoot accuracies of players grouped by Dominant foot</CardTitle>
+                        </Col>
                     <Col>
                         <Card>
                             <CardBody>
