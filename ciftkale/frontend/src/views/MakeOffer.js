@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText, FormGroup, Label } from 'reactstrap';
+import axios from 'axios';
+
+const qs = require('query-string');
 
 class MakeOffer extends Component {
     constructor(props) {
@@ -20,9 +23,9 @@ class MakeOffer extends Component {
 
         axios.get('http://ciftkale.herokuapp.com/api/player', {params: {username: this.player}})
             .then(res => {
-                this.setState({playername: res.full_name});
+                this.setState({playername: res.name});
             });
-        axios.get('http://ciftkale.herokuapp.com/api/player', {params: {username: director}})
+        axios.get('http://ciftkale.herokuapp.com/api/director', {params: {username: director}})
             .then(res => {
                 this.club_name = res.data.club_name;
                 let params = {

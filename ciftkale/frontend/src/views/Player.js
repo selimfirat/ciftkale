@@ -123,7 +123,7 @@ class ViewPlayer extends Component {
                                             <NavLink href="#/offers">
                                                 <Button color="secondary">View Offers</Button>
                                             </NavLink>
-                                            <NavLink href="#/makeOffer?username={this.state.player_name}">
+                                            <NavLink href={"#/makeOffer?username=" + this.props.match.params.id}>
                                                 <Button color="secondary">Make Offer</Button>
                                             </NavLink>
                                         </Col>
