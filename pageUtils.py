@@ -74,9 +74,16 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
             if not agent_username:
                 agent_username = ''
 
+            filter_start = 0
+            filter_end = 100
+            if filter_overall is not "":
+                fs = filter_overall.split("-")
+                filter_start = int(fs[0])
+                filter_end = int(fs[1]) if len(fs) > 1 else int(fs[0])
+
             cursor.execute(
                 """
-                SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score,
+                SELECT c.club_name, p.nationality, u.first_name, u.last_name, p.overall_score, u.username,
                 count(*) OVER() as full_count 
                 FROM Person u, Player p, Club c NATURAL JOIN CurrentOccupations co 
                 WHERE u.username = p.player_username 
@@ -85,14 +92,15 @@ def getPlayersTable(filter_team = "", filter_nation = "", filter_name = "", filt
                 AND p.nationality ILIKE %s 
                 AND (u.first_name || ' ' || u.last_name ILIKE %s OR u.last_name || ' ' || u.first_name ILIKE %s)
                 AND p.agent_username ILIKE %s
-                AND p.overall_score::varchar ILIKE %s
+                AND p.overall_score BETWEEN %s AND %s
                 """ + sort_query + " LIMIT %s OFFSET %s", 
                 ["%" + filter_team + "%", 
                 "%" + filter_nation + "%", 
                 "%" + filter_name + "%",
                 "%" + filter_name + "%", 
                 "%" + agent_username + "%",
-                "%" + filter_overall + "%",
+                filter_start,
+                filter_end,
                 items_per_page, 
                 page_num * items_per_page]
             )
@@ -157,14 +165,14 @@ def getPlayerInfo(username):
         red_card = row[0]
 
         return {
-            'position' : position,
+            'position_name' : position,
             'kit_number' : kit_number,
             'weight' : weight,
             'height' : height,
             'dominant_foot' : dominant_foot,
-            'full_name' : full_name, 
+            'name' : full_name, 
             'salary' : salary,
-            'club' : team,
+            'team' : team,
             'goal' : goal,
             'assist' : assist,
             'shot' : shot,
@@ -208,9 +216,10 @@ def getClubInfo(clubName):
         except DatabaseError:
             return  {'result': 'failed'};
         
-        cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
+        cursor.execute("SELECT p.first_name, p.last_name, p.username FROM CurrentOccupations co, Director d, Person p WHERE d.director_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
         director_name = row[0] + " " + row[1]
+        director_username = row[2]
 
         cursor.execute("SELECT p.first_name, p.last_name FROM CurrentOccupations co, Coach c, Person p WHERE c.coach_username = co.sportsman_username AND p.username = co.sportsman_username AND club_name = %s", [clubName])
         row = cursor.fetchone();
@@ -224,6 +233,7 @@ def getClubInfo(clubName):
                 'country': country,
                 'director_name' : director_name,
                 'coach_name' : coach_name,
+                'director_username': director_username,
                 'result': 'success'}
 
 def getCoachInfo(username):
@@ -303,36 +313,26 @@ def getAgentInfo(username):
         except DatabaseError:
             return  {'result': 'failed'};
 
+
 def getHomePageInfo():
     with connection.cursor() as cursor:
         try:
-            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.overall_score) FROM Person p, Player pl 
-            WHERE p.username = pl.player_username 
-            GROUP BY p.first_name, p.last_name, pl.overall_score 
-            ORDER BY pl.overall_score DESC LIMIT 10""")
-            rows = cursor.fetchall()
+            """cursor.execute("""SELECT c.league_name AVG(pl.overall_score) as acc 
+            FROM currentOccupations oc, Player pl, Club c
+            WHERE  oc.sportsman_username = pl.player_username AND c.club_name = oc.club_name
+            GROUP BY c.league_name
+            ORDER BY acc DESC LIMIT 10""")
+            rows = cursor.fetchall()"""
 
-            scorers = []
-
-            for i in range(len(rows)):
-                scorers.append(rows[i][0] + " " + rows[i][1])
-
-            cursor.execute("""SELECT p.first_name, p.last_name, MAX(pl.shot_accuracy) FROM Person p, Player pl 
-            WHERE p.username = pl.player_username 
-            GROUP BY p.first_name, p.last_name, pl.shot_accuracy 
-            ORDER BY pl.shot_accuracy DESC LIMIT 10""")
+            cursor.execute("""SELECT pl.dominant_foot AVG(pl.shot_accuracy) as acc 
+            FROM Player pl
+            GROUP BY pl.dominant_foot
+            ORDER BY acc""")
             rows2 = cursor.fetchall()
-
-            shooters =[]
-
-            for i in range(len(rows2)):
-                shooters.append(rows2[i][0] + " " + rows2[i][1])
             
             return {
-                'scorer_names' : scorers,
-                'scores': rows[:][3],
-                'shooter_names' : shooters,
-                'accuracies' :  rows2[:][3],
+                #'league_overalls': rows,
+                'accuracies_for_foot': rows2, 
                 'result': 'success'
             }
 
